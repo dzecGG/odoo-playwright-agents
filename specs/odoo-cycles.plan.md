@@ -45,17 +45,18 @@ ODOO COMMUNITY LIMITATIONS / FACTS TO RECORD IN THE README (do not fake):
     - expect: No journal items posted (API: no account.move for the order)
   3. SALES (Sam Sales): click Confirm.
     - expect: Status becomes Sales Order, name has prefix S
-    - expect: A Delivery smart button shows 1
+    - expect: Sam does not see a Delivery smart button: Odoo shows it only to Inventory users (stock.group_stock_user), so Sam's step checks only the status; the delivery is checked through the API
     - expect: A Delivery picking WH/OUT/xxxxx exists in state Ready (API check, stock.picking with origin = order name, state 'assigned')
     - expect: Reserved quantity 10 of the 20 on hand; on-hand quantity still 20.00
     - expect: No journal items posted by confirmation
-  4. WAREHOUSE (Wes Warehouse, warehousePage): open Inventory > Operations > Deliveries, search the order reference, open the delivery, click Validate (set quantity done to 10 if needed; if an 'immediate transfer' dialog appears, click Apply).
+  4. WAREHOUSE (Wes Warehouse, warehousePage): open Inventory > Operations > Deliveries, search the order reference, open the delivery, check the delivery in the UI (its name WH/OUT/xxxxx and status Ready), then click Validate (set quantity done to 10 if needed; if an 'immediate transfer' dialog appears, click Apply).
+    - expect: Before validating, Wes sees the delivery with status Ready
     - expect: Delivery state is Done
     - expect: On-hand quantity (API stock.quant, WH/Stock) is 10.00 (20 - 10)
     - expect: Customers location quant is not counted as on hand; stock.move for the product has quantity 10 and state done
     - expect: Ledger check: no account.move.line is created for this stock move (periodic valuation in Community config; limitation documented). Account 500000 Cost of Goods Sold and 110100 Inventory Valuation have no lines for this product
     - expect: Sales order delivered quantity = 10
-  5. ACCOUNTING (Ada Accounting, accountingPage): open the sales order's invoice. Because Sam Sales does not have invoicing rights, Ada opens Invoicing > Customers > Invoices and uses the order, OR Sam clicks Create Invoice > Regular invoice and Ada continues from the draft invoice. Pick one flow and keep it: Sam (sales) clicks Create Invoice on the order and Create Draft Invoice in the wizard; Ada then opens Invoicing > Customers > Invoices, finds the draft for the customer, and clicks Confirm.
+  5. ACCOUNTING (Ada Accounting, accountingPage): open the sales order's invoice. Because Sam Sales does not have invoicing rights, Ada opens Invoicing > Customers > Invoices and uses the order, OR Sam clicks Create Invoice > Regular invoice and Ada continues from the draft invoice. Pick one flow and keep it: Sam (sales) clicks Create Invoice on the order and Create Draft in the wizard (Odoo 19 then opens the new draft invoice); Ada then opens Invoicing > Customers > Invoices, finds the draft for the customer, and clicks Confirm.
     - expect: Invoice state Posted, number INV/<year>/00001 pattern, journal Sales
     - expect: Amount Total $ 1,060.00, Amount Due $ 1,060.00, payment state 'Not Paid'
     - expect: Journal items (API account.move.line, posted): 121000 Accounts Receivable debit 1,060.00 credit 0.00; 400000 Product Sales debit 0.00 credit 1,000.00; 251000 Tax Received debit 0.00 credit 60.00
@@ -93,8 +94,21 @@ ODOO COMMUNITY LIMITATIONS / FACTS TO RECORD IN THE README (do not fake):
   2. SALES (Sam Sales, salesPage): open the Home Menu and look for Inventory, Purchase and Invoicing apps; navigate directly to the draft invoice URL (/odoo/action-account.action_move_out_invoice_type/<id>) and the delivery picking URL.
     - expect: Inventory and Purchase are not in the Home Menu; the Home Menu lists Sales
     - expect: The draft invoice and delivery cannot be edited or posted by the sales user: either an Access Error dialog is shown or no Confirm / Validate button is available
-    - expect: API as sales (apiAs('sales')) calling account.move action_post on the invoice raises an AccessError; calling stock.picking button_validate raises an AccessError
+    - expect: API as sales (apiAs('sales')) calling account.move action_post on the invoice raises an AccessError; the sales user's attempt to validate the delivery over the API is its own scenario, O2C-N2b
     - expect: Invoice remains draft, delivery remains Ready, on-hand quantity still 20.00
+
+#### 1.3b. O2C-N2b Sales user cannot validate a delivery through the API
+
+**File:** `tests/order-to-cash/role-restrictions.spec.ts`
+
+**Known finding:** this scenario is expected to fail today and is marked `test.fail()` with the annotation `{ type: 'bug', description: 'Segregation of duties: a Sales: User can validate a delivery through the external API (stock.picking.button_validate), although the UI hides it' }`. Reproduced: Sam's call returns true and the delivery goes to Done. Cause: `sale_stock/security/ir.model.access.csv` gives Sales: User read, write and create on `stock.picking`, while the UI hides Inventory and the Validate button from Sam. The business rule is that only the warehouse ships goods, so the assertion stays. When Odoo closes the gap, the test will pass unexpectedly: remove `test.fail()` then.
+
+**Steps:**
+  1. SETUP (API, admin): customer, product with stock 20, confirmed sales order of 10 units.
+    - expect: A delivery exists in state Ready
+  2. SALES (Sam Sales, API as sales): call stock.picking button_validate on the delivery.
+    - expect: The call raises an AccessError
+    - expect: The delivery remains Ready
 
 #### 1.4. O2C-N3 Fully paid invoice cannot be paid again
 
@@ -127,21 +141,23 @@ ODOO COMMUNITY LIMITATIONS / FACTS TO RECORD IN THE README (do not fake):
     - expect: No journal items posted
   3. PURCHASING (Pat Purchase): click Confirm Order.
     - expect: Status Purchase Order, name prefix P
-    - expect: Receipt smart button shows 1; receipt WH/IN/xxxxx exists in state Ready (API check)
+    - expect: Pat has no Receipt or Receive button and no way to bill the order: Odoo shows those only to Inventory users (stock.group_stock_user). Segregation of duties, so Pat's step ends at the confirmed order and nothing else is checked in Pat's UI
+    - expect: Receipt WH/IN/xxxxx exists in state Ready and the order's incoming picking count is 1 (API check)
     - expect: On-hand quantity still 0 (nothing received yet)
     - expect: No journal items posted by confirmation
-  4. WAREHOUSE (Wes Warehouse, warehousePage): open Inventory > Operations > Receipts, search the PO reference, open the receipt, click Validate (quantity 10).
+  4. WAREHOUSE (Wes Warehouse, warehousePage): open Inventory > Operations > Receipts, search the PO reference, open the receipt, check it is Ready, click Validate (quantity 10).
+    - expect: Receipt shows state Ready before validation (Wes checks the receipt in the UI)
     - expect: Receipt state Done
     - expect: On-hand quantity (stock.quant, WH/Stock) is 10.00 (0 + 10)
     - expect: PO line received quantity = 10
     - expect: Ledger check: no account.move.line created for the receipt (periodic valuation, limitation 1); no lines on 110100 Inventory Valuation or Stock Interim for this product
-  5. ACCOUNTING (Ada Accounting, accountingPage): Purchasing (Pat) clicks Create Bill on the PO to make the draft bill, or Ada opens Invoicing > Vendors > Bills and finds the draft linked to the PO. Fill Bill Date (today) and the vendor reference 'PW-REF-<uuid>' if required, then Ada clicks Confirm.
+  5. ACCOUNTING (Ada Accounting, accountingPage): Ada opens the purchase order list (/odoo/action-purchase.purchase_form_action; Invoicing rights already include read/write on purchase orders, no extra group), selects the PO and clicks Create Bills, which makes the draft bill linked to the PO (Odoo 19 has no Create Bill button on the PO form, and the bill form's Auto-Complete needs Purchase: User, which Ada does not have). Fill Bill Date (today) and the vendor reference 'PW-REF-<uuid>', then Ada clicks Confirm.
     - expect: Bill state Posted, journal Purchases, number BILL/<year>/..
     - expect: Amount Total $ 636.00, payment state Not Paid
     - expect: Journal items: 690000 Miscellaneous Expenses debit 600.00 credit 0.00; 131000 Tax Paid debit 36.00 credit 0.00; 211000 Accounts Payable debit 0.00 credit 636.00
     - expect: Total debits = total credits = 636.00
     - expect: On-hand quantity unchanged at 10.00
-    - expect: PO invoice status 'Fully Billed'
+    - expect: PO invoice status 'Fully Billed' (invoiced) and the PO's bills are exactly this bill
   6. ACCOUNTING (Ada Accounting): on the posted bill click Pay; journal Bank, method Manual Payment, amount 636.00; click Create Payment.
     - expect: Bill shows the 'Paid' ribbon, amount due 0.00
     - expect: Payment record: partner = vendor, type outbound, amount 636.00

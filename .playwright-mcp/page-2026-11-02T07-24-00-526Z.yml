@@ -1,0 +1,191 @@
+- generic [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - navigation [ref=f3e3]:
+      - button "" [ref=f3e5] [cursor=pointer]
+      - menuitem "Purchase" [ref=f3e25] [cursor=pointer]
+      - menu [ref=f3e26]:
+        - button "Orders" [ref=f3e27] [cursor=pointer]
+        - button "Products" [ref=f3e29] [cursor=pointer]
+      - menu [ref=f3e7]:
+        - button "Messages 2" [ref=f3e9] [cursor=pointer]:
+          - img "Messages" [ref=f3e10]: 
+          - generic [ref=f3e11]: "2"
+        - button [ref=f3e12] [cursor=pointer]:
+          - img "Activities" [ref=f3e13]: 
+        - button "My Company" [disabled] [ref=f3e15]: 
+        - generic: 
+        - button [ref=f3e18] [cursor=pointer]:
+          - generic [ref=f3e19]:
+            - img "User" [ref=f3e20]
+            - img "User is online" [ref=f3e23]: 
+          - text: 
+  - generic [ref=f3e356]:
+    - generic [ref=f3e359]:
+      - button "New" [ref=f3e361] [cursor=pointer]
+      - generic [ref=f3e362]:
+        - list [ref=f3e363]:
+          - listitem [ref=f3e364]:
+            - link "Requests for Quotation" [ref=f3e365] [cursor=pointer]:
+              - /url: /odoo/purchase
+        - generic [ref=f3e366]:
+          - generic [ref=f3e367]: New
+          - button "Actions menu" [ref=f3e372] [cursor=pointer]:
+            - generic [ref=f3e373]: 
+      - generic [ref=f3e375]:
+        - button "Save manually" [ref=f3e376] [cursor=pointer]:
+          - generic [ref=f3e377]: 
+        - button "Discard all changes" [ref=f3e378] [cursor=pointer]:
+          - generic [ref=f3e379]: 
+    - main [ref=f3e380]:
+      - generic [ref=f3e381]:
+        - generic [ref=f3e382]:
+          - generic [ref=f3e383]:
+            - generic [ref=f3e384]:
+              - button "Send RFQ" [ref=f3e385] [cursor=pointer]
+              - button "Confirm Order" [ref=f3e386] [cursor=pointer]
+              - button "Print" [ref=f3e387] [cursor=pointer]
+              - button "Cancel" [ref=f3e388] [cursor=pointer]
+            - radiogroup "Statusbar" [ref=f3e390]:
+              - radio "Purchase Order" [disabled]
+              - radio "RFQ Sent" [disabled]
+              - radio "RFQ" [checked] [disabled]
+          - generic [ref=f3e391]:
+            - generic [ref=f3e392]:
+              - text: Request for Quotation
+              - heading "Priority New" [level=1] [ref=f3e393]:
+                - radiogroup "Priority" [ref=f3e395]:
+                  - radio "Urgent" [ref=f3e396] [cursor=pointer]: 
+                - generic [ref=f3e397]: New
+            - generic [ref=f3e398]:
+              - generic [ref=f3e399]:
+                - generic [ref=f3e401]:
+                  - text: Vendor
+                  - superscript [ref=f3e402]: "?"
+                - combobox "Vendor?" [ref=f3e409]: PW Vendor mm9d8c93fd
+                - generic [ref=f3e411]:
+                  - text: Vendor Reference
+                  - superscript [ref=f3e412]: "?"
+                - textbox "Vendor Reference?" [ref=f3e415]
+              - generic [ref=f3e416]:
+                - generic [ref=f3e418]:
+                  - text: Order Deadline
+                  - superscript [ref=f3e419]: "?"
+                - button "Order Deadline?" [ref=f3e423] [cursor=pointer]: Nov 2, 7:23 AM
+                - generic [ref=f3e425]:
+                  - text: Expected Arrival
+                  - superscript [ref=f3e426]: "?"
+                - generic [ref=f3e428]:
+                  - textbox "Expected Arrival?" [ref=f3e431] [cursor=pointer]:
+                    - /placeholder: ""
+                  - button "No data yet" [ref=f3e577] [cursor=pointer]
+                - generic "Automatically send a confirmation email to the vendor X days before the expected receipt date, asking him to confirm the exact date." [ref=f3e434]:
+                  - checkbox "Receipt Reminder Email" [ref=f3e437] [cursor=pointer]
+                  - generic [ref=f3e438]: Ask confirmation
+                - generic [ref=f3e440]:
+                  - text: Deliver To
+                  - superscript [ref=f3e441]: "?"
+                - combobox "Deliver To?" [ref=f3e448]: "My Company: Receipts"
+            - generic [ref=f3e449]:
+              - list [ref=f3e451]:
+                - listitem [ref=f3e452]:
+                  - tab "Products" [ref=f3e453]
+                - listitem [ref=f3e454]:
+                  - tab "Other Information" [ref=f3e455] [cursor=pointer]
+              - generic [ref=f3e457]:
+                - table [ref=f3e461]:
+                  - rowgroup [ref=f3e462]:
+                    - row [ref=f3e463]:
+                      - columnheader [ref=f3e464]
+                      - columnheader "Product" [ref=f3e465]:
+                        - generic [ref=f3e466]:
+                          - generic [ref=f3e467]: Product
+                          - text: 
+                      - columnheader "Quantity" [ref=f3e469]:
+                        - generic [ref=f3e470]:
+                          - generic [ref=f3e471]: Quantity
+                          - text: 
+                      - columnheader [ref=f3e473]
+                      - columnheader "Unit Price" [ref=f3e474]:
+                        - generic [ref=f3e475]:
+                          - generic [ref=f3e476]: Unit Price
+                          - text: 
+                      - columnheader "Taxes" [ref=f3e478]:
+                        - generic [ref=f3e479]:
+                          - generic [ref=f3e480]: Taxes
+                          - text: 
+                      - columnheader "Amount" [ref=f3e482]:
+                        - generic [ref=f3e483]:
+                          - generic [ref=f3e484]: Amount
+                          - text: 
+                      - columnheader [ref=f3e486]:
+                        - button "" [ref=f3e488] [cursor=pointer]
+                  - rowgroup [ref=f3e490]:
+                    - row [ref=f3e579]:
+                      - cell "" [ref=f3e580] [cursor=pointer]
+                      - cell [ref=f3e583] [cursor=pointer]:
+                        - generic [ref=f3e586]:
+                          - combobox "Search a product" [active] [ref=f3e591]
+                          - button "" [ref=f3e592]
+                      - cell [ref=f3e593] [cursor=pointer]:
+                        - textbox [ref=f3e595]: "0.00"
+                      - cell [ref=f3e596] [cursor=pointer]
+                      - cell [ref=f3e597] [cursor=pointer]:
+                        - textbox [ref=f3e599]: "0.00"
+                      - cell [ref=f3e600] [cursor=pointer]:
+                        - combobox [ref=f3e606]
+                      - cell "$ 0.00" [ref=f3e607] [cursor=pointer]
+                      - cell [ref=f3e610]:
+                        - button "Delete row" [ref=f3e611] [cursor=pointer]: 
+                    - row [ref=f3e491]:
+                      - cell [ref=f3e492]
+                      - cell [ref=f3e493]:
+                        - button "Add a product" [ref=f3e494] [cursor=pointer]
+                        - button "Add a section" [ref=f3e495] [cursor=pointer]
+                        - button "Add a note" [ref=f3e496] [cursor=pointer]
+                        - button "Catalog" [ref=f3e497] [cursor=pointer]
+                    - row [ref=f3e498]:
+                      - cell [ref=f3e499]
+                    - row [ref=f3e500]:
+                      - cell [ref=f3e501]
+                  - rowgroup [ref=f3e504]:
+                    - row [ref=f3e505]:
+                      - cell [ref=f3e506]
+                      - cell [ref=f3e507]
+                - generic [ref=f3e508]:
+                  - generic [ref=f3e509]: Define your terms and conditions ...
+                  - table [ref=f3e520]:
+                    - rowgroup [ref=f3e521]:
+                      - row [ref=f3e522]:
+                        - cell "Untaxed Amount:" [ref=f3e523]
+                        - cell "$ 0.00" [ref=f3e525]
+                      - row [ref=f3e526]:
+                        - cell "Total:" [ref=f3e527]
+                        - cell "$ 0.00" [ref=f3e529]
+        - generic [ref=f3e531]:
+          - generic [ref=f3e533]:
+            - button "Send message" [ref=f3e534] [cursor=pointer]
+            - button "Log note" [ref=f3e535] [cursor=pointer]
+            - button "Activity" [ref=f3e536] [cursor=pointer]
+            - button "Search Messages" [ref=f3e538] [cursor=pointer]:
+              - img [ref=f3e539]: 
+            - generic [ref=f3e541]:
+              - button "Attach files" [disabled]:
+                - generic: 
+            - generic [ref=f3e542]:
+              - button "0" [disabled]:
+                - img: 
+                - superscript: "0"
+          - generic [ref=f3e545]:
+            - generic [ref=f3e547]:
+              - separator [ref=f3e548]
+              - generic [ref=f3e549]: Today
+              - separator [ref=f3e550]
+            - group "System notification" [ref=f3e551]:
+              - generic [ref=f3e552]:
+                - generic "Open card" [ref=f3e554] [cursor=pointer]
+                - generic [ref=f3e556]:
+                  - generic [ref=f3e557]:
+                    - generic "Open card" [ref=f3e558] [cursor=pointer]:
+                      - strong [ref=f3e559]: Pat Purchase
+                    - generic "11/2/2026, 7:23:42 AM" [ref=f3e560]: 7:23 AM
+                  - generic [ref=f3e561]: Creating a new record...

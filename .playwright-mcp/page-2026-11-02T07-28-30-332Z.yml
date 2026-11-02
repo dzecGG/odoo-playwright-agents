@@ -1,0 +1,38 @@
+- generic [ref=f11e2]:
+  - link "Skip to Content" [ref=f11e3] [cursor=pointer]:
+    - /url: "#wrap"
+  - main [ref=f11e4]:
+    - generic [ref=f11e7]:
+      - img "Logo" [ref=f11e9]
+      - form [ref=f11e36]:
+        - generic [ref=f11e37]:
+          - generic [ref=f11e38]:
+            - text: Email
+            - button "Choose a user" [ref=f11e39] [cursor=pointer]
+          - textbox "Email Choose a user" [ref=f11e40]:
+            - /placeholder: Enter your email
+            - text: pw.purchase
+        - generic [ref=f11e41]:
+          - generic [ref=f11e42]:
+            - generic [ref=f11e43]: Password
+            - link "Reset Password" [ref=f11e44] [cursor=pointer]:
+              - /url: /web/reset_password?
+          - generic [ref=f11e45]:
+            - textbox "Password" [active] [ref=f11e46]:
+              - /placeholder: Enter your password
+            - button "" [ref=f11e47] [cursor=pointer]
+        - generic [ref=f11e49]:
+          - button "Log in" [ref=f11e50] [cursor=pointer]
+          - link "Don't have an account?" [ref=f11e51] [cursor=pointer]:
+            - /url: /web/signup?
+          - generic [ref=f11e52]:
+            - emphasis [ref=f11e53]: "- or -"
+            - link " Use a Passkey" [ref=f11e55] [cursor=pointer]:
+              - /url: "#"
+              - text: 
+              - generic [ref=f11e56]: Use a Passkey
+      - generic [ref=f11e33]:
+        - link "Manage Databases" [ref=f11e34] [cursor=pointer]:
+          - /url: /web/database/manager
+        - link "Powered by Odoo" [ref=f11e35] [cursor=pointer]:
+          - /url: https://www.odoo.com?utm_source=db&utm_medium=auth

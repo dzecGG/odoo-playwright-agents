@@ -1,0 +1,173 @@
+- generic [active] [ref=f7e1]:
+  - banner [ref=f7e2]:
+    - navigation [ref=f7e3]:
+      - button "" [ref=f7e5] [cursor=pointer]
+      - menuitem "Discuss" [ref=f7e25] [cursor=pointer]
+      - menu [ref=f7e26]:
+        - menuitem "Discuss" [ref=f7e27] [cursor=pointer]
+        - menuitem "Channels" [ref=f7e28] [cursor=pointer]
+        - button "Configuration" [ref=f7e29] [cursor=pointer]
+      - menu [ref=f7e7]:
+        - button "Messages 2" [ref=f7e9] [cursor=pointer]:
+          - img "Messages" [ref=f7e10]: 
+          - generic [ref=f7e11]: "2"
+        - button [ref=f7e12] [cursor=pointer]:
+          - img "Activities" [ref=f7e13]: 
+        - button "My Company" [disabled] [ref=f7e15]: 
+        - generic: 
+        - button [ref=f7e18] [cursor=pointer]:
+          - generic [ref=f7e19]:
+            - img "User" [ref=f7e20]
+            - img "User is online" [ref=f7e23]: 
+          - text: 
+  - generic [ref=f7e211]:
+    - generic [ref=f7e213]:
+      - generic [ref=f7e214]:
+        - button "New" [ref=f7e216] [cursor=pointer]
+        - generic [ref=f7e217]:
+          - list [ref=f7e218]:
+            - listitem [ref=f7e219]:
+              - link "Receipts" [ref=f7e220] [cursor=pointer]:
+                - /url: /odoo/receipts
+          - generic [ref=f7e221]:
+            - generic [ref=f7e222]: WH/IN/00003
+            - button "Actions menu" [ref=f7e227] [cursor=pointer]:
+              - generic [ref=f7e228]: 
+      - button " Moves" [ref=f7e232] [cursor=pointer]:
+        - generic [ref=f7e233]: 
+        - generic [ref=f7e234]: Moves
+      - search [ref=f7e237]:
+        - navigation "Pager" [ref=f7e238]:
+          - generic [ref=f7e239]:
+            - generic [ref=f7e240]: "1"
+            - text: / 1
+          - generic [ref=f7e241]:
+            - button "Previous" [disabled]:
+              - generic: 
+            - button "Next" [disabled]:
+              - generic: 
+    - main [ref=f7e242]:
+      - generic [ref=f7e243]:
+        - generic [ref=f7e244]:
+          - generic [ref=f7e245]:
+            - generic [ref=f7e246]:
+              - button "Validate" [ref=f7e247] [cursor=pointer]
+              - button "Print" [ref=f7e248] [cursor=pointer]
+              - button "Return" [ref=f7e249] [cursor=pointer]
+              - button "Cancel" [ref=f7e250] [cursor=pointer]
+            - radiogroup "Statusbar" [ref=f7e252]:
+              - radio "Done" [disabled]
+              - radio "Ready" [checked] [disabled]
+              - radio "Draft" [disabled]
+          - generic [ref=f7e253]:
+            - heading "Priority WH/IN/00003" [level=1] [ref=f7e255]:
+              - radiogroup "Priority" [ref=f7e257]:
+                - radio "Urgent" [ref=f7e258] [cursor=pointer]: 
+              - generic [ref=f7e259]: WH/IN/00003
+            - generic [ref=f7e260]:
+              - generic [ref=f7e261]:
+                - generic [ref=f7e262]: Receive From
+                - combobox "Receive From" [ref=f7e271]: PW Vendor mm9d8c93fd
+                - generic [ref=f7e272]: Operation Type
+                - combobox "Operation Type" [ref=f7e280]: "My Company: Receipts"
+              - generic [ref=f7e281]:
+                - generic [ref=f7e283]:
+                  - text: Scheduled Date
+                  - superscript [ref=f7e284]: "?"
+                - button "Scheduled Date?" [ref=f7e289] [cursor=pointer]: Nov 2, 7:23 AM
+                - generic [ref=f7e291]:
+                  - text: Deadline
+                  - superscript [ref=f7e292]: "?"
+                - generic [ref=f7e293]: Nov 2, 7:23 AM
+                - generic [ref=f7e298]:
+                  - text: Source Document
+                  - superscript [ref=f7e299]: "?"
+                - textbox "Source Document?" [ref=f7e302]:
+                  - /placeholder: e.g. PO0032
+                  - text: P00009
+            - generic [ref=f7e305]:
+              - list [ref=f7e307]:
+                - listitem [ref=f7e308]:
+                  - tab "Operations" [ref=f7e309]
+                - listitem [ref=f7e310]:
+                  - tab "Additional Info" [ref=f7e311] [cursor=pointer]
+                - listitem [ref=f7e312]:
+                  - tab "Note" [ref=f7e313] [cursor=pointer]
+              - table [ref=f7e319]:
+                - rowgroup [ref=f7e320]:
+                  - row [ref=f7e321]:
+                    - columnheader "Product " [ref=f7e322] [cursor=pointer]:
+                      - generic [ref=f7e323]:
+                        - generic [ref=f7e324]: Product
+                        - generic [ref=f7e325]: 
+                    - columnheader "Demand " [ref=f7e327] [cursor=pointer]:
+                      - generic [ref=f7e328]:
+                        - generic [ref=f7e329]: Demand
+                        - generic [ref=f7e330]: 
+                    - columnheader "Quantity " [ref=f7e332] [cursor=pointer]:
+                      - generic [ref=f7e333]:
+                        - generic [ref=f7e334]: Quantity
+                        - generic [ref=f7e335]: 
+                    - columnheader [ref=f7e337]
+                    - columnheader [ref=f7e338]:
+                      - button "" [ref=f7e340] [cursor=pointer]
+                - rowgroup [ref=f7e342]:
+                  - row [ref=f7e343]:
+                    - cell [ref=f7e344] [cursor=pointer]:
+                      - generic [ref=f7e347]:
+                        - link "PW Part mm9d8c93fd" [ref=f7e349]:
+                          - /url: /odoo/product.product/17
+                        - button "" [ref=f7e350]
+                    - cell "10.00" [ref=f7e351] [cursor=pointer]
+                    - cell "10.00" [ref=f7e352] [cursor=pointer]
+                    - cell [ref=f7e353] [cursor=pointer]
+                    - cell [ref=f7e354]
+                  - row [ref=f7e355]:
+                    - cell [ref=f7e356]:
+                      - button "Add a Product" [ref=f7e357] [cursor=pointer]
+                  - row [ref=f7e358]:
+                    - cell [ref=f7e359]
+                  - row [ref=f7e360]:
+                    - cell [ref=f7e361]
+                - rowgroup [ref=f7e362]:
+                  - row [ref=f7e363]:
+                    - cell [ref=f7e364]
+                    - cell [ref=f7e365]
+        - generic [ref=f7e367]:
+          - generic [ref=f7e369]:
+            - button "Send message" [ref=f7e370] [cursor=pointer]
+            - button "Log note" [ref=f7e371] [cursor=pointer]
+            - button "Activity" [ref=f7e372] [cursor=pointer]
+            - button "Search Messages" [ref=f7e374] [cursor=pointer]:
+              - img [ref=f7e375]: 
+            - button "Attach files" [ref=f7e378] [cursor=pointer]:
+              - generic [ref=f7e379]: 
+            - button "0" [ref=f7e381] [cursor=pointer]:
+              - img [ref=f7e382]: 
+              - superscript: "0"
+          - generic [ref=f7e385]:
+            - generic [ref=f7e387]:
+              - separator [ref=f7e388]
+              - generic [ref=f7e389]: Today
+              - separator [ref=f7e390]
+            - group "System notification" [ref=f7e391]:
+              - generic [ref=f7e392]:
+                - generic "Open card" [ref=f7e394] [cursor=pointer]
+                - generic [ref=f7e396]:
+                  - generic [ref=f7e397]:
+                    - generic "Open card" [ref=f7e398] [cursor=pointer]:
+                      - strong [ref=f7e399]: OdooBot
+                    - generic "11/2/2026, 7:25:02 AM" [ref=f7e400]: 7:25 AM
+                  - paragraph [ref=f7e407]:
+                    - text: "This transfer has been created from:"
+                    - link "P00009" [ref=f7e408] [cursor=pointer]:
+                      - /url: "#"
+            - group "System notification" [ref=f7e409]:
+              - generic [ref=f7e410]:
+                - generic "Open card" [ref=f7e412] [cursor=pointer]
+                - generic [ref=f7e414]:
+                  - generic [ref=f7e415]:
+                    - generic "Open card" [ref=f7e416] [cursor=pointer]:
+                      - strong [ref=f7e417]: OdooBot
+                    - generic "11/2/2026, 7:25:01 AM" [ref=f7e418]: 7:25 AM
+                  - paragraph [ref=f7e425]: Transfer created

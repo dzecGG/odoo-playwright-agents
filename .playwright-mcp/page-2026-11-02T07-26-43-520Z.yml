@@ -1,0 +1,122 @@
+- generic [ref=f7e1]:
+  - banner [ref=f7e2]:
+    - navigation [ref=f7e3]:
+      - button "" [ref=f7e5] [cursor=pointer]
+      - menuitem "Discuss" [ref=f7e25] [cursor=pointer]
+      - menu [ref=f7e26]:
+        - menuitem "Discuss" [ref=f7e27] [cursor=pointer]
+        - menuitem "Channels" [ref=f7e28] [cursor=pointer]
+        - button "Configuration" [ref=f7e29] [cursor=pointer]
+      - menu [ref=f7e7]:
+        - button "Messages 2" [ref=f7e9] [cursor=pointer]:
+          - img "Messages" [ref=f7e10]: 
+          - generic [ref=f7e11]: "2"
+        - button [ref=f7e12] [cursor=pointer]:
+          - img "Activities" [ref=f7e13]: 
+        - button "My Company" [disabled] [ref=f7e15]: 
+        - generic: 
+        - button [ref=f7e18] [cursor=pointer]:
+          - generic [ref=f7e19]:
+            - img "User" [ref=f7e20]
+            - img "User is online" [ref=f7e23]: 
+          - text: 
+  - generic [ref=f7e31]:
+    - generic [ref=f7e33]:
+      - generic [ref=f7e34]:
+        - button "New" [ref=f7e36] [cursor=pointer]
+        - generic [ref=f7e37]:
+          - generic [ref=f7e38]: Receipts
+          - button "Actions menu" [ref=f7e43] [cursor=pointer]:
+            - generic [ref=f7e44]: 
+      - search [ref=f7e46]:
+        - search [ref=f7e47]:
+          - button "Search..." [ref=f7e48] [cursor=pointer]:
+            - img [ref=f7e49]: 
+          - generic [ref=f7e50]:
+            - listitem "search" [ref=f7e51]:
+              - button " " [ref=f7e53] [cursor=pointer]:
+                - generic [ref=f7e54]: 
+                - generic [ref=f7e55]: 
+              - generic [ref=f7e57]:
+                - generic "Receipts" [ref=f7e58]
+                - button "Remove" [ref=f7e59] [cursor=pointer]: 
+            - listitem "search" [ref=f7e182]:
+              - button "Transfer " [ref=f7e184] [cursor=pointer]:
+                - text: Transfer
+                - generic [ref=f7e185]: 
+              - generic [ref=f7e187]:
+                - generic "P00009" [ref=f7e188]
+                - button "Remove" [ref=f7e189] [cursor=pointer]: 
+            - searchbox "Search..." [active] [ref=f7e60]
+        - button "" [ref=f7e61] [cursor=pointer]
+      - generic [ref=f7e62]:
+        - search [ref=f7e63]:
+          - navigation "Pager" [ref=f7e64]:
+            - generic [ref=f7e65]:
+              - generic [ref=f7e66]: 1-1
+              - text: / 1
+            - generic [ref=f7e67]:
+              - button "Previous" [disabled]:
+                - generic: 
+              - button "Next" [disabled]:
+                - generic: 
+        - navigation [ref=f7e68]:
+          - button "List View" [ref=f7e69] [cursor=pointer]:
+            - generic [ref=f7e70]: 
+          - button "Kanban View" [ref=f7e71] [cursor=pointer]:
+            - generic [ref=f7e72]: 
+          - button "Calendar View" [ref=f7e73] [cursor=pointer]:
+            - generic [ref=f7e74]: 
+          - button "Activity View" [ref=f7e75] [cursor=pointer]:
+            - generic [ref=f7e76]: 
+    - main [ref=f7e77]:
+      - table [ref=f7e79]:
+        - rowgroup [ref=f7e80]:
+          - row [ref=f7e81]:
+            - columnheader [ref=f7e82] [cursor=pointer]:
+              - checkbox [ref=f7e84]
+            - columnheader [ref=f7e85]
+            - columnheader "Reference " [ref=f7e86] [cursor=pointer]:
+              - generic [ref=f7e87]:
+                - generic [ref=f7e88]: Reference
+                - generic [ref=f7e89]: 
+            - columnheader "Contact " [ref=f7e91] [cursor=pointer]:
+              - generic [ref=f7e92]:
+                - generic [ref=f7e93]: Contact
+                - generic [ref=f7e94]: 
+            - columnheader "Scheduled Date " [ref=f7e96] [cursor=pointer]:
+              - generic [ref=f7e97]:
+                - generic [ref=f7e98]: Scheduled Date
+                - generic [ref=f7e99]: 
+            - columnheader "Source Document " [ref=f7e101] [cursor=pointer]:
+              - generic [ref=f7e102]:
+                - generic [ref=f7e103]: Source Document
+                - generic [ref=f7e104]: 
+            - columnheader "Status " [ref=f7e106] [cursor=pointer]:
+              - generic [ref=f7e107]:
+                - generic [ref=f7e108]: Status
+                - generic [ref=f7e109]: 
+            - columnheader [ref=f7e111]
+            - columnheader [ref=f7e112]
+            - columnheader [ref=f7e113]:
+              - button "" [ref=f7e115] [cursor=pointer]
+        - rowgroup [ref=f7e117]:
+          - row [ref=f7e190]:
+            - cell [ref=f7e191]:
+              - checkbox [ref=f7e193] [cursor=pointer]
+            - cell [ref=f7e194] [cursor=pointer]:
+              - radiogroup "Priority" [ref=f7e196]:
+                - radio "Urgent" [ref=f7e197]: 
+            - cell "WH/IN/00003" [ref=f7e198] [cursor=pointer]
+            - cell "PW Vendor mm9d8c93fd" [ref=f7e199] [cursor=pointer]
+            - cell "Today" [ref=f7e200] [cursor=pointer]:
+              - generic "11/02/2026" [ref=f7e202]: Today
+            - cell "P00009" [ref=f7e203] [cursor=pointer]
+            - cell "Ready" [ref=f7e204] [cursor=pointer]
+            - cell [ref=f7e207] [cursor=pointer]
+            - cell [ref=f7e208] [cursor=pointer]
+            - cell [ref=f7e209]
+        - rowgroup [ref=f7e178]:
+          - row [ref=f7e179]:
+            - cell [ref=f7e180]
+            - cell [ref=f7e181]

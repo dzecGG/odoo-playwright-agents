@@ -1,0 +1,185 @@
+- generic [ref=f10e1]:
+  - banner [ref=f10e2]:
+    - navigation [ref=f10e3]:
+      - button "" [ref=f10e5] [cursor=pointer]
+      - menuitem "Discuss" [ref=f10e25] [cursor=pointer]
+      - menu [ref=f10e26]:
+        - menuitem "Discuss" [ref=f10e27] [cursor=pointer]
+        - menuitem "Channels" [ref=f10e28] [cursor=pointer]
+        - button "Configuration" [ref=f10e29] [cursor=pointer]
+      - menu [ref=f10e7]:
+        - button "Messages 2" [ref=f10e9] [cursor=pointer]:
+          - img "Messages" [ref=f10e10]: 
+          - generic [ref=f10e11]: "2"
+        - button [ref=f10e12] [cursor=pointer]:
+          - img "Activities" [ref=f10e13]: 
+        - button "My Company" [disabled] [ref=f10e15]: 
+        - generic: 
+        - button [ref=f10e18] [cursor=pointer]:
+          - generic [ref=f10e19]:
+            - img "User" [ref=f10e20]
+            - img "User is online" [ref=f10e23]: 
+          - text: 
+  - generic [ref=f10e167]:
+    - generic [ref=f10e169]:
+      - generic [ref=f10e170]:
+        - button "New" [ref=f10e172] [cursor=pointer]
+        - generic [ref=f10e173]:
+          - list [ref=f10e174]:
+            - listitem [ref=f10e175]:
+              - link "Bills" [ref=f10e176] [cursor=pointer]:
+                - /url: /odoo/bills
+          - generic [ref=f10e177]:
+            - generic [ref=f10e178]: Draft Bill
+            - button "Actions menu" [ref=f10e183] [cursor=pointer]:
+              - generic [ref=f10e184]: 
+        - generic [ref=f10e186]:
+          - button "Save manually" [ref=f10e187] [cursor=pointer]:
+            - generic [ref=f10e188]: 
+          - button "Discard all changes" [ref=f10e189] [cursor=pointer]:
+            - generic [ref=f10e190]: 
+      - button " Journal Items" [ref=f10e193] [cursor=pointer]:
+        - generic [ref=f10e194]: 
+        - generic [ref=f10e195]: Journal Items
+    - main [ref=f10e197]:
+      - generic [ref=f10e198]:
+        - generic [ref=f10e199]:
+          - generic [ref=f10e200]:
+            - button "Confirm" [ref=f10e202] [cursor=pointer]
+            - radiogroup "Statusbar" [ref=f10e204]:
+              - radio "Posted" [disabled]
+              - radio "Draft" [checked] [disabled]
+          - generic [ref=f10e205]:
+            - generic [ref=f10e206]:
+              - radiogroup "Type" [ref=f10e210]:
+                - generic [ref=f10e211]:
+                  - radio "Bill" [checked] [ref=f10e212] [cursor=pointer]
+                  - generic [ref=f10e213] [cursor=pointer]: Bill
+                - generic [ref=f10e214]:
+                  - radio "Receipt" [ref=f10e215] [cursor=pointer]
+                  - generic [ref=f10e216] [cursor=pointer]: Receipt
+              - heading [level=1] [ref=f10e217]:
+                - textbox "BILL/2026/11/0001" [ref=f10e219]
+            - generic [ref=f10e220]:
+              - generic [ref=f10e221]:
+                - generic [ref=f10e222]: Vendor
+                - combobox "Vendor" [active] [ref=f10e231]
+                - generic [ref=f10e232]: Bill Reference
+                - textbox "Bill Reference" [ref=f10e236]
+                - generic [ref=f10e238]:
+                  - text: Auto-Complete
+                  - superscript [ref=f10e239]: "?"
+                - combobox "Auto-Complete?" [ref=f10e246]
+              - generic [ref=f10e247]:
+                - generic [ref=f10e248]: Bill Date
+                - textbox [ref=f10e253] [cursor=pointer]
+                - generic [ref=f10e254]: Accounting Date
+                - button "Accounting Date" [ref=f10e259] [cursor=pointer]: Nov 2
+                - generic [ref=f10e261]:
+                  - text: Payment Reference
+                  - superscript [ref=f10e262]: "?"
+                - textbox "Payment Reference?" [ref=f10e265]:
+                  - /placeholder: Use Bill Reference
+                - generic [ref=f10e267]:
+                  - text: Recipient Bank
+                  - superscript [ref=f10e268]: "?"
+                - combobox "Recipient Bank?" [ref=f10e275]
+                - generic [ref=f10e276]: Due Date
+                - generic [ref=f10e280]:
+                  - button "Due Date" [ref=f10e283] [cursor=pointer]: Nov 2
+                  - generic [ref=f10e284]: or
+                  - combobox "Payment Terms" [ref=f10e290]
+                - generic [ref=f10e291]: Journal
+                - combobox "Journal" [ref=f10e300]: Purchases
+            - generic [ref=f10e301]:
+              - list [ref=f10e303]:
+                - listitem [ref=f10e304]:
+                  - tab "Invoice Lines" [ref=f10e305]
+                - listitem [ref=f10e306]:
+                  - tab "Other Info" [ref=f10e307] [cursor=pointer]
+              - generic [ref=f10e309]:
+                - table [ref=f10e313]:
+                  - rowgroup [ref=f10e314]:
+                    - row [ref=f10e315]:
+                      - columnheader [ref=f10e316]
+                      - columnheader "Label" [ref=f10e317]:
+                        - generic [ref=f10e318]:
+                          - generic [ref=f10e319]: Label
+                          - text: 
+                      - columnheader "Quantity" [ref=f10e321]:
+                        - generic [ref=f10e322]:
+                          - generic [ref=f10e323]: Quantity
+                          - text: 
+                      - columnheader "Price" [ref=f10e325]:
+                        - generic [ref=f10e326]:
+                          - generic [ref=f10e327]: Price
+                          - text: 
+                      - columnheader "Taxes" [ref=f10e329]:
+                        - generic [ref=f10e330]:
+                          - generic [ref=f10e331]: Taxes
+                          - text: 
+                      - columnheader "Amount" [ref=f10e333]:
+                        - generic [ref=f10e334]:
+                          - generic [ref=f10e335]: Amount
+                          - text: 
+                      - columnheader [ref=f10e337]:
+                        - button "" [ref=f10e339] [cursor=pointer]
+                  - rowgroup [ref=f10e341]:
+                    - row [ref=f10e342]:
+                      - cell [ref=f10e343]
+                      - cell [ref=f10e344]:
+                        - button "Add a line" [ref=f10e345] [cursor=pointer]
+                        - button "Add a section" [ref=f10e346] [cursor=pointer]
+                        - button "Add a note" [ref=f10e347] [cursor=pointer]
+                        - button "Catalog" [ref=f10e348] [cursor=pointer]
+                    - row [ref=f10e349]:
+                      - cell [ref=f10e350]
+                    - row [ref=f10e351]:
+                      - cell [ref=f10e352]
+                    - row [ref=f10e353]:
+                      - cell [ref=f10e354]
+                  - rowgroup [ref=f10e355]:
+                    - row [ref=f10e356]:
+                      - cell [ref=f10e357]
+                      - cell [ref=f10e358]
+                - generic [ref=f10e359]:
+                  - generic [ref=f10e360]: Terms and Conditions
+                  - generic [ref=f10e369]:
+                    - table [ref=f10e372]:
+                      - rowgroup [ref=f10e373]:
+                        - row [ref=f10e374]:
+                          - cell "Untaxed Amount:" [ref=f10e375]
+                          - cell "$ 0.00" [ref=f10e377]
+                        - row [ref=f10e378]:
+                          - cell "Total:" [ref=f10e379]
+                          - cell "$ 0.00" [ref=f10e381]
+                    - generic [ref=f10e382]: "Amount Due:"
+                    - generic [ref=f10e384]: $ 0.00
+        - generic [ref=f10e388]:
+          - generic [ref=f10e390]:
+            - button "Send message" [ref=f10e391] [cursor=pointer]
+            - button "Log note" [ref=f10e392] [cursor=pointer]
+            - button "Activity" [ref=f10e393] [cursor=pointer]
+            - button "Search Messages" [ref=f10e395] [cursor=pointer]:
+              - img [ref=f10e396]: 
+            - generic [ref=f10e398]:
+              - button "Attach files" [disabled]:
+                - generic: 
+            - generic [ref=f10e399]:
+              - button "0" [disabled]:
+                - img: 
+                - superscript: "0"
+          - generic [ref=f10e402]:
+            - generic [ref=f10e404]:
+              - separator [ref=f10e405]
+              - generic [ref=f10e406]: Today
+              - separator [ref=f10e407]
+            - group "System notification" [ref=f10e408]:
+              - generic [ref=f10e409]:
+                - generic "Open card" [ref=f10e411] [cursor=pointer]
+                - generic [ref=f10e413]:
+                  - generic [ref=f10e414]:
+                    - generic "Open card" [ref=f10e415] [cursor=pointer]:
+                      - strong [ref=f10e416]: Ada Accounting
+                    - generic "11/2/2026, 7:27:58 AM" [ref=f10e417]: 7:27 AM
+                  - generic [ref=f10e418]: Creating a new record...

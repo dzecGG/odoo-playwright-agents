@@ -1,0 +1,235 @@
+- generic [active] [ref=f16e1]:
+  - banner [ref=f16e2]:
+    - navigation [ref=f16e3]:
+      - button "" [ref=f16e5] [cursor=pointer]
+      - menuitem "Discuss" [ref=f16e290] [cursor=pointer]
+      - menu [ref=f16e291]:
+        - menuitem "Discuss" [ref=f16e292] [cursor=pointer]
+        - menuitem "Channels" [ref=f16e293] [cursor=pointer]
+        - button "Configuration" [ref=f16e294] [cursor=pointer]
+      - menu [ref=f16e7]:
+        - button "Messages 2" [ref=f16e9] [cursor=pointer]:
+          - img "Messages" [ref=f16e10]: 
+          - generic [ref=f16e11]: "2"
+        - button [ref=f16e12] [cursor=pointer]:
+          - img "Activities" [ref=f16e13]: 
+        - button "My Company" [disabled] [ref=f16e15]: 
+        - generic: 
+        - button [ref=f16e18] [cursor=pointer]:
+          - generic [ref=f16e19]:
+            - img "User" [ref=f16e20]
+            - img "User is online" [ref=f16e23]: 
+          - text: 
+  - generic [ref=f16e26]:
+    - generic [ref=f16e28]:
+      - generic [ref=f16e29]:
+        - button "New" [ref=f16e31] [cursor=pointer]
+        - generic [ref=f16e32]:
+          - list [ref=f16e33]:
+            - listitem [ref=f16e34]:
+              - link "Bills" [ref=f16e35] [cursor=pointer]:
+                - /url: /odoo/action-account.action_move_in_invoice_type
+          - generic [ref=f16e36]:
+            - generic [ref=f16e37]: BILL/2026/11/0001 (PW-REF-mm9d8c93fd)
+            - button "Actions menu" [ref=f16e42] [cursor=pointer]:
+              - generic [ref=f16e43]: 
+      - generic [ref=f16e51]:
+        - button " 1 Payments" [ref=f16e576] [cursor=pointer]:
+          - generic [ref=f16e577]: 
+          - generic [ref=f16e578]:
+            - generic [ref=f16e579]: "1"
+            - generic [ref=f16e580]: Payments
+        - button " Journal Items" [ref=f16e52] [cursor=pointer]:
+          - generic [ref=f16e53]: 
+          - generic [ref=f16e54]: Journal Items
+      - search [ref=f16e414]:
+        - navigation "Pager" [ref=f16e415]:
+          - generic [ref=f16e416]:
+            - generic [ref=f16e417]: "1"
+            - text: / 1
+          - generic [ref=f16e418]:
+            - button "Previous" [disabled]:
+              - generic: 
+            - button "Next" [disabled]:
+              - generic: 
+    - main [ref=f16e56]:
+      - generic [ref=f16e57]:
+        - generic [ref=f16e58]:
+          - generic [ref=f16e59]:
+            - generic [ref=f16e60]:
+              - button "Credit Note" [ref=f16e420] [cursor=pointer]
+              - button "Reset to Draft" [ref=f16e421] [cursor=pointer]
+            - radiogroup "Statusbar" [ref=f16e63]:
+              - radio "Posted" [checked] [disabled]
+              - radio "Draft" [disabled]
+          - generic [ref=f16e64]:
+            - generic: Paid
+            - generic [ref=f16e65]:
+              - generic [ref=f16e66]: Vendor Bill
+              - heading "BILL/2026/11/0001" [level=1] [ref=f16e422]
+            - generic [ref=f16e79]:
+              - generic [ref=f16e80]:
+                - generic [ref=f16e81]: Vendor
+                - link "PW Vendor mm9d8c93fd" [ref=f16e423] [cursor=pointer]:
+                  - /url: /odoo/res.partner/26
+                - generic [ref=f16e91]: Bill Reference
+                - textbox "Bill Reference" [ref=f16e95]: PW-REF-mm9d8c93fd
+              - generic [ref=f16e106]:
+                - generic [ref=f16e107]: Bill Date
+                - generic [ref=f16e109]: Nov 2
+                - generic [ref=f16e113]: Accounting Date
+                - generic [ref=f16e115]: Nov 2
+                - generic [ref=f16e120]:
+                  - text: Payment Reference
+                  - superscript [ref=f16e121]: "?"
+                - textbox "Payment Reference?" [ref=f16e124]:
+                  - /placeholder: Use Bill Reference
+                - generic [ref=f16e126]:
+                  - text: Recipient Bank
+                  - superscript [ref=f16e127]: "?"
+                - combobox "Recipient Bank?" [ref=f16e581]
+                - generic [ref=f16e135]: Due Date
+                - button "Due Date" [ref=f16e142] [cursor=pointer]: Nov 2
+            - generic [ref=f16e160]:
+              - list [ref=f16e162]:
+                - listitem [ref=f16e163]:
+                  - tab "Invoice Lines" [ref=f16e164]
+                - listitem [ref=f16e165]:
+                  - tab "Other Info" [ref=f16e166] [cursor=pointer]
+              - generic [ref=f16e168]:
+                - table [ref=f16e172]:
+                  - rowgroup [ref=f16e173]:
+                    - row [ref=f16e366]:
+                      - columnheader [ref=f16e175]
+                      - columnheader "Product" [ref=f16e367]:
+                        - generic [ref=f16e368]:
+                          - generic [ref=f16e369]: Product
+                          - text: 
+                      - columnheader "Quantity" [ref=f16e180]:
+                        - generic [ref=f16e181]:
+                          - generic [ref=f16e182]: Quantity
+                          - text: 
+                      - columnheader "Price" [ref=f16e184]:
+                        - generic [ref=f16e185]:
+                          - generic [ref=f16e186]: Price
+                          - text: 
+                      - columnheader "Taxes" [ref=f16e188]:
+                        - generic [ref=f16e189]:
+                          - generic [ref=f16e190]: Taxes
+                          - text: 
+                      - columnheader "Amount" [ref=f16e192]:
+                        - generic [ref=f16e193]:
+                          - generic [ref=f16e194]: Amount
+                          - text: 
+                      - columnheader [ref=f16e196]:
+                        - button "" [ref=f16e198] [cursor=pointer]
+                  - rowgroup [ref=f16e200]:
+                    - row [ref=f16e582]:
+                      - cell "" [ref=f16e583] [cursor=pointer]
+                      - cell [ref=f16e585] [cursor=pointer]:
+                        - link "PW Part mm9d8c93fd" [ref=f16e590]:
+                          - /url: /odoo/product.product/17
+                      - cell "10.00" [ref=f16e591] [cursor=pointer]
+                      - cell "60.00" [ref=f16e592] [cursor=pointer]
+                      - cell [ref=f16e593] [cursor=pointer]:
+                        - generic "6%" [ref=f16e596]
+                      - cell "$ 600.00" [ref=f16e598] [cursor=pointer]
+                      - cell [ref=f16e599]
+                    - row [ref=f16e208]:
+                      - cell [ref=f16e209]
+                    - row [ref=f16e210]:
+                      - cell [ref=f16e211]
+                    - row [ref=f16e444]:
+                      - cell [ref=f16e445]
+                  - rowgroup [ref=f16e214]:
+                    - row [ref=f16e215]:
+                      - cell [ref=f16e216]
+                      - cell [ref=f16e217]
+                - generic [ref=f16e218]:
+                  - generic [ref=f16e219]: Terms and Conditions
+                  - generic [ref=f16e228]:
+                    - table [ref=f16e231]:
+                      - rowgroup [ref=f16e232]:
+                        - row [ref=f16e450]:
+                          - cell "Untaxed Amount:" [ref=f16e234]
+                          - cell "$ 600.00" [ref=f16e451]
+                        - row [ref=f16e452]:
+                          - cell "Tax 6%:" [ref=f16e402]
+                          - cell "$ 36.00" [ref=f16e453]
+                        - row [ref=f16e455]:
+                          - cell "Total:" [ref=f16e238]
+                          - cell "$ 636.00" [ref=f16e456]
+                    - table [ref=f16e604]:
+                      - row [ref=f16e605]:
+                        - cell [ref=f16e606]:
+                          - button "Info" [ref=f16e607] [cursor=pointer]: 
+                        - cell "Paid on 11/02/2026" [ref=f16e608]
+                        - cell "$ 636.00" [ref=f16e610]
+                    - generic [ref=f16e611]: "Amount Due:"
+                    - generic [ref=f16e613]: $ 0.00
+        - generic [ref=f16e247]:
+          - generic [ref=f16e249]:
+            - button "Send message" [ref=f16e250] [cursor=pointer]
+            - button "Log note" [ref=f16e251] [cursor=pointer]
+            - button "Activity" [ref=f16e252] [cursor=pointer]
+            - button "Search Messages" [ref=f16e254] [cursor=pointer]:
+              - img [ref=f16e255]: 
+            - button "Attach files" [ref=f16e459] [cursor=pointer]:
+              - generic [ref=f16e460]: 
+            - button "1" [ref=f16e461] [cursor=pointer]:
+              - img [ref=f16e462]: 
+              - superscript: "1"
+          - generic [ref=f16e464]:
+            - generic [ref=f16e616]:
+              - separator [ref=f16e617]
+              - generic [ref=f16e618]: Today
+              - separator [ref=f16e619]
+            - group "System notification" [ref=f16e620]:
+              - generic [ref=f16e621]:
+                - generic "Open card" [ref=f16e623] [cursor=pointer]
+                - generic [ref=f16e625]:
+                  - generic [ref=f16e626]:
+                    - generic "Open card" [ref=f16e627] [cursor=pointer]:
+                      - strong [ref=f16e628]: Ada Accounting
+                    - generic "11/2/2026, 7:32:21 AM" [ref=f16e629]: 7:32 AM
+                  - generic [ref=f16e633]:
+                    - paragraph [ref=f16e634]: Invoice paid
+                    - list [ref=f16e635]:
+                      - group [ref=f16e636]:
+                        - text: Not Paid
+                        - generic [ref=f16e637]: 
+                        - text: Paid
+                        - generic [ref=f16e638]: (Payment Status)
+            - group "System notification" [ref=f16e470]:
+              - generic [ref=f16e471]:
+                - generic "Open card" [ref=f16e473] [cursor=pointer]
+                - generic [ref=f16e475]:
+                  - generic [ref=f16e476]:
+                    - generic "Open card" [ref=f16e477] [cursor=pointer]:
+                      - strong [ref=f16e478]: Ada Accounting
+                    - generic "11/2/2026, 7:31:35 AM" [ref=f16e479]: 7:31 AM
+                  - list [ref=f16e484]:
+                    - group [ref=f16e485]:
+                      - text: "No"
+                      - generic [ref=f16e486]: 
+                      - text: "Yes"
+                      - generic [ref=f16e487]: (Reviewed)
+                    - group [ref=f16e488]:
+                      - text: None
+                      - generic [ref=f16e489]: 
+                      - text: BILL/2026/11/0001
+                      - generic [ref=f16e490]: (Number)
+                    - group [ref=f16e491]:
+                      - text: Draft
+                      - generic [ref=f16e492]: 
+                      - text: Posted
+                      - generic [ref=f16e493]: (Status)
+            - group "System notification" [ref=f16e494]:
+              - generic [ref=f16e495]:
+                - generic "Open card" [ref=f16e497] [cursor=pointer]
+                - generic [ref=f16e499]:
+                  - generic [ref=f16e500]:
+                    - generic "Open card" [ref=f16e501] [cursor=pointer]:
+                      - strong [ref=f16e502]: Ada Accounting
+                    - generic "11/2/2026, 7:31:35 AM" [ref=f16e503]: 7:31 AM
+                  - paragraph [ref=f16e510]: Vendor Bill Created

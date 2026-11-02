@@ -1,0 +1,52 @@
+- generic [active] [ref=f9e1]:
+  - banner [ref=f9e2]:
+    - navigation [ref=f9e3]:
+      - button "" [ref=f9e5] [cursor=pointer]
+      - menuitem "Discuss" [ref=f9e7] [cursor=pointer]
+      - menu [ref=f9e8]:
+        - menuitem "Discuss" [ref=f9e9] [cursor=pointer]
+        - menuitem "Channels" [ref=f9e10] [cursor=pointer]
+        - button "Configuration" [ref=f9e11] [cursor=pointer]
+      - menu [ref=f9e13]:
+        - button "Messages 2" [ref=f9e15] [cursor=pointer]:
+          - img "Messages" [ref=f9e16]: 
+          - generic [ref=f9e17]: "2"
+        - button [ref=f9e18] [cursor=pointer]:
+          - img "Activities" [ref=f9e19]: 
+        - button "My Company" [disabled] [ref=f9e21]: 
+        - generic: 
+        - button [ref=f9e24] [cursor=pointer]:
+          - generic [ref=f9e25]:
+            - img "User" [ref=f9e26]
+            - img "User is offline" [ref=f9e29]: 
+          - text: 
+  - generic [ref=f9e32]:
+    - generic [ref=f9e35]:
+      - generic [ref=f9e36]:
+        - generic [ref=f9e37]:
+          - generic [ref=f9e38]:
+            - generic [ref=f9e39]: 
+            - textbox "Search conversations" [disabled] [ref=f9e40]
+          - generic [ref=f9e41] [cursor=pointer]
+        - button "New Meeting" [ref=f9e42] [cursor=pointer]
+      - button " Starred messages" [ref=f9e46] [cursor=pointer]:
+        - generic [ref=f9e47]: 
+        - generic [ref=f9e49]: Starred messages
+      - button " Channels" [ref=f9e51] [cursor=pointer]:
+        - generic [ref=f9e52]: 
+        - generic [ref=f9e53]: Channels
+      - button "Thread Image general " [ref=f9e56] [cursor=pointer]:
+        - generic "general" [ref=f9e57]:
+          - img "Thread Image" [ref=f9e59]
+        - generic "Thread has unread messages" [ref=f9e61]: 
+        - text: 
+      - button " Direct messages" [ref=f9e64] [cursor=pointer]:
+        - generic [ref=f9e65]: 
+        - generic [ref=f9e66]: Direct messages
+      - button "Thread Image User is a bot OdooBot" [ref=f9e68] [cursor=pointer]:
+        - generic "OdooBot" [ref=f9e69]:
+          - generic [ref=f9e70]:
+            - img "Thread Image" [ref=f9e71]
+            - img "User is a bot" [ref=f9e75]: 
+        - text: 
+    - heading "No conversation selected." [level=4] [ref=f9e83]

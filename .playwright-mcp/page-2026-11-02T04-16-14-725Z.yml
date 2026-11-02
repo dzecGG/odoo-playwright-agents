@@ -1,0 +1,169 @@
+- generic [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - navigation [ref=f1e3]:
+      - button "" [ref=f1e5] [cursor=pointer]
+      - menuitem "Sales" [ref=f1e25] [cursor=pointer]
+      - menu [ref=f1e26]:
+        - button "Orders" [ref=f1e27] [cursor=pointer]
+        - button "To Invoice" [ref=f1e29] [cursor=pointer]
+        - button "Products" [ref=f1e31] [cursor=pointer]
+      - menu [ref=f1e7]:
+        - button "Messages 2" [ref=f1e9] [cursor=pointer]:
+          - img "Messages" [ref=f1e10]: 
+          - generic [ref=f1e11]: "2"
+        - button [ref=f1e12] [cursor=pointer]:
+          - img "Activities" [ref=f1e13]: 
+        - button "My Company" [disabled] [ref=f1e15]: 
+        - generic: 
+        - button [ref=f1e18] [cursor=pointer]:
+          - generic [ref=f1e19]:
+            - img "User" [ref=f1e20]
+            - img "User is online" [ref=f1e23]: 
+          - text: 
+  - generic [ref=f1e34]:
+    - generic [ref=f1e37]:
+      - button "New" [ref=f1e39] [cursor=pointer]
+      - generic [ref=f1e40]:
+        - list [ref=f1e41]:
+          - listitem [ref=f1e42]:
+            - link "Quotations" [ref=f1e43] [cursor=pointer]:
+              - /url: /odoo/action-sale.action_quotations_with_onboarding
+        - generic [ref=f1e44]:
+          - generic [ref=f1e45]: New
+          - button "Actions menu" [ref=f1e50] [cursor=pointer]:
+            - generic [ref=f1e51]: 
+      - generic [ref=f1e53]:
+        - button "Save manually" [ref=f1e54] [cursor=pointer]:
+          - generic [ref=f1e55]: 
+        - button "Discard all changes" [ref=f1e56] [cursor=pointer]:
+          - generic [ref=f1e57]: 
+    - main [ref=f1e58]:
+      - generic [ref=f1e59]:
+        - generic [ref=f1e60]:
+          - generic [ref=f1e61]:
+            - generic [ref=f1e62]:
+              - button "Send" [ref=f1e63] [cursor=pointer]
+              - button "Print" [ref=f1e64] [cursor=pointer]
+              - button "Confirm" [ref=f1e65] [cursor=pointer]
+              - button "Preview" [ref=f1e66] [cursor=pointer]
+            - radiogroup "Statusbar" [ref=f1e68]:
+              - radio "Sales Order" [disabled]
+              - radio "Quotation Sent" [disabled]
+              - radio "Quotation" [checked] [disabled]
+          - generic [ref=f1e69]:
+            - heading "New" [level=1] [ref=f1e71]
+            - generic [ref=f1e73]:
+              - generic [ref=f1e74]:
+                - generic [ref=f1e75]: Customer
+                - combobox "Customer" [ref=f1e83]
+              - generic [ref=f1e84]:
+                - generic [ref=f1e86]:
+                  - text: Expiration
+                  - superscript [ref=f1e87]: "?"
+                - button "Expiration?" [ref=f1e91] [cursor=pointer]: Dec 2
+                - generic [ref=f1e92]: Payment Terms
+                - combobox "Payment Terms" [ref=f1e100]
+            - generic [ref=f1e101]:
+              - list [ref=f1e103]:
+                - listitem [ref=f1e104]:
+                  - tab "Order Lines" [ref=f1e105]
+                - listitem [ref=f1e106]:
+                  - tab "Other Info" [ref=f1e107] [cursor=pointer]
+              - generic [ref=f1e109]:
+                - table [ref=f1e113]:
+                  - rowgroup [ref=f1e114]:
+                    - row [ref=f1e115]:
+                      - columnheader [ref=f1e116]
+                      - columnheader "Product" [ref=f1e117]:
+                        - generic [ref=f1e118]:
+                          - generic [ref=f1e119]: Product
+                          - text: 
+                      - columnheader "Quantity" [ref=f1e121]:
+                        - generic [ref=f1e122]:
+                          - generic [ref=f1e123]: Quantity
+                          - text: 
+                      - columnheader [ref=f1e125]
+                      - columnheader "Unit Price" [ref=f1e126]:
+                        - generic [ref=f1e127]:
+                          - generic [ref=f1e128]: Unit Price
+                          - text: 
+                      - columnheader "Taxes" [ref=f1e130]:
+                        - generic [ref=f1e131]:
+                          - generic [ref=f1e132]: Taxes
+                          - text: 
+                      - columnheader "Amount" [ref=f1e134]:
+                        - generic [ref=f1e135]:
+                          - generic [ref=f1e136]: Amount
+                          - text: 
+                      - columnheader [ref=f1e138]:
+                        - button "" [ref=f1e140] [cursor=pointer]
+                  - rowgroup [ref=f1e142]:
+                    - row "  1.00 0.00 $ 0.00 Delete row" [ref=f1e143]:
+                      - cell "" [ref=f1e144] [cursor=pointer]
+                      - cell [ref=f1e147] [cursor=pointer]:
+                        - generic [ref=f1e150]:
+                          - combobox "Search a product" [active] [ref=f1e155]
+                          - button "" [ref=f1e156]
+                      - cell [ref=f1e157] [cursor=pointer]:
+                        - textbox [ref=f1e159]: "1.00"
+                      - cell [ref=f1e160]
+                      - cell [ref=f1e162] [cursor=pointer]:
+                        - textbox [ref=f1e164]: "0.00"
+                      - cell [ref=f1e165] [cursor=pointer]:
+                        - combobox [ref=f1e171]
+                      - cell "$ 0.00" [ref=f1e172] [cursor=pointer]
+                      - cell [ref=f1e175]:
+                        - button "Delete row" [ref=f1e176] [cursor=pointer]: 
+                    - row [ref=f1e177]:
+                      - cell [ref=f1e178]
+                      - cell [ref=f1e179]:
+                        - button "Add a product" [ref=f1e180] [cursor=pointer]
+                        - button "Add a section" [ref=f1e181] [cursor=pointer]
+                        - button "Add a note" [ref=f1e182] [cursor=pointer]
+                        - button "Catalog" [ref=f1e183] [cursor=pointer]
+                    - row [ref=f1e184]:
+                      - cell [ref=f1e185]
+                    - row [ref=f1e186]:
+                      - cell [ref=f1e187]
+                  - rowgroup [ref=f1e188]:
+                    - row [ref=f1e189]:
+                      - cell [ref=f1e190]
+                      - cell [ref=f1e191]
+                - generic [ref=f1e192]:
+                  - generic [ref=f1e193]: Terms and conditions...
+                  - table [ref=f1e205]:
+                    - rowgroup [ref=f1e206]:
+                      - row [ref=f1e207]:
+                        - cell "Untaxed Amount:" [ref=f1e208]
+                        - cell "$ 0.00" [ref=f1e210]
+                      - row [ref=f1e211]:
+                        - cell "Total:" [ref=f1e212]
+                        - cell "$ 0.00" [ref=f1e214]
+        - generic [ref=f1e216]:
+          - generic [ref=f1e218]:
+            - button "Send message" [ref=f1e219] [cursor=pointer]
+            - button "Log note" [ref=f1e220] [cursor=pointer]
+            - button "Activity" [ref=f1e221] [cursor=pointer]
+            - button "Search Messages" [ref=f1e223] [cursor=pointer]:
+              - img [ref=f1e224]: 
+            - generic [ref=f1e226]:
+              - button "Attach files" [disabled]:
+                - generic: 
+            - generic [ref=f1e227]:
+              - button "0" [disabled]:
+                - img: 
+                - superscript: "0"
+          - generic [ref=f1e230]:
+            - generic [ref=f1e232]:
+              - separator [ref=f1e233]
+              - generic [ref=f1e234]: Today
+              - separator [ref=f1e235]
+            - group "System notification" [ref=f1e236]:
+              - generic [ref=f1e237]:
+                - generic "Open card" [ref=f1e239] [cursor=pointer]
+                - generic [ref=f1e241]:
+                  - generic [ref=f1e242]:
+                    - generic "Open card" [ref=f1e243] [cursor=pointer]:
+                      - strong [ref=f1e244]: Sam Sales
+                    - generic "11/2/2026, 4:16:11 AM" [ref=f1e245]: 4:16 AM
+                  - generic [ref=f1e246]: Creating a new record...

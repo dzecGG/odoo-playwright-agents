@@ -1,0 +1,12 @@
+- generic [ref=f1e2]:
+  - link "Skip to Content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#wrap"
+  - main [ref=f1e4]:
+    - generic [ref=f1e7]:
+      - img "Logo" [ref=f1e9]
+      - text:  
+      - generic [ref=f1e10]:
+        - link "Manage Databases" [ref=f1e11] [cursor=pointer]:
+          - /url: /web/database/manager
+        - link "Powered by Odoo" [ref=f1e12] [cursor=pointer]:
+          - /url: https://www.odoo.com?utm_source=db&utm_medium=auth

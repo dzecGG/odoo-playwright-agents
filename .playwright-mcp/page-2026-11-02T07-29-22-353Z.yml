@@ -1,0 +1,38 @@
+- generic [ref=f14e2]:
+  - link "Skip to Content" [ref=f14e3] [cursor=pointer]:
+    - /url: "#wrap"
+  - main [ref=f14e4]:
+    - generic [ref=f14e7]:
+      - img "Logo" [ref=f14e9]
+      - generic [ref=f14e12]:
+        - paragraph [ref=f14e13]: Choose a user
+        - generic [ref=f14e14]:
+          - button "pw.purchase Pat Purchase " [active] [ref=f14e15] [cursor=pointer]:
+            - generic [ref=f14e16]:
+              - img "pw.purchase" [ref=f14e17]
+              - text: Pat Purchase
+            - generic "Remove user from switcher" [ref=f14e18]: 
+          - button "pw.accounting Ada Accounting " [ref=f14e19] [cursor=pointer]:
+            - generic [ref=f14e20]:
+              - img "pw.accounting" [ref=f14e21]
+              - text: Ada Accounting
+            - generic "Remove user from switcher" [ref=f14e22]: 
+          - button "pw.warehouse Wes Warehouse " [ref=f14e23] [cursor=pointer]:
+            - generic [ref=f14e24]:
+              - img "pw.warehouse" [ref=f14e25]
+              - text: Wes Warehouse
+            - generic "Remove user from switcher" [ref=f14e26]: 
+          - button "pw.sales Sam Sales " [ref=f14e27] [cursor=pointer]:
+            - generic [ref=f14e28]:
+              - img "pw.sales" [ref=f14e29]
+              - text: Sam Sales
+            - generic "Remove user from switcher" [ref=f14e30]: 
+        - button " Use another user" [ref=f14e31] [cursor=pointer]:
+          - generic [ref=f14e32]: 
+          - text: Use another user
+      - text:  
+      - generic [ref=f14e33]:
+        - link "Manage Databases" [ref=f14e34] [cursor=pointer]:
+          - /url: /web/database/manager
+        - link "Powered by Odoo" [ref=f14e35] [cursor=pointer]:
+          - /url: https://www.odoo.com?utm_source=db&utm_medium=auth
