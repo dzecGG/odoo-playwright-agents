@@ -3,6 +3,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '../../src/fixtures';
+import { InvoicePage } from '../../src/pages';
 
 test.describe('Order to Cash', () => {
   test('O2C-N3 Fully paid invoice cannot be paid again', async ({ api, accountingPage }) => {
@@ -50,14 +51,14 @@ test.describe('Order to Cash', () => {
     expect(invoice.amount_residual).toBe(1060);
 
     // 2. ACCOUNTING (Ada Accounting): open the invoice, click Pay, accept the default amount, click Create Payment.
-    await accountingPage.goto(`/odoo/action-account.action_move_out_invoice_type/${invoiceId}`);
-    await expect(accountingPage.getByRole('radio', { name: 'Posted', exact: true })).toBeChecked();
-    await accountingPage.getByRole('button', { name: 'Pay', exact: true }).click();
-    const paymentDialog = accountingPage.getByRole('dialog');
-    await expect(paymentDialog.getByRole('textbox', { name: 'Amount' })).toHaveValue('1,060.00');
-    await paymentDialog.getByRole('button', { name: 'Create Payment' }).click();
+    const invoicePage = new InvoicePage(accountingPage);
+    await invoicePage.gotoCustomerInvoice(invoiceId);
+    await expect(invoicePage.statusStep('Posted')).toBeChecked();
+    const paymentDialog = await invoicePage.pay();
+    await expect(paymentDialog.amount).toHaveValue('1,060.00');
+    await paymentDialog.createPayment();
 
-    await expect(accountingPage.locator('span.text-bg-success').getByText('Paid', { exact: true })).toBeVisible();
+    await expect(invoicePage.paidBadge).toBeVisible();
 
     const [paidInvoice] = await api.read<{ payment_state: string; amount_residual: number }>(
       'account.move',
@@ -68,8 +69,8 @@ test.describe('Order to Cash', () => {
     expect(paidInvoice.amount_residual).toBe(0);
 
     // 3. ACCOUNTING (Ada Accounting): look at the paid invoice's header buttons.
-    await expect(accountingPage.getByRole('button', { name: 'Pay', exact: true })).toHaveCount(0);
-    await expect(accountingPage.getByRole('button', { name: 'Register Payment' })).toHaveCount(0);
+    await expect(invoicePage.payButton).toHaveCount(0);
+    await expect(invoicePage.registerPaymentButton).toHaveCount(0);
 
     const receivable = await api.searchRead<{ balance: number }>(
       'account.move.line',

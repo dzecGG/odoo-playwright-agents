@@ -4,6 +4,7 @@
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '../../src/fixtures';
 import type { OdooClient } from '../../src/api';
+import { InvoicePage, PickingPage, PurchaseOrderPage } from '../../src/pages';
 
 type MoveLine = { account_id: [number, string]; debit: number; credit: number };
 
@@ -93,23 +94,17 @@ test.describe('Procure to Pay', () => {
 
       // 2. PURCHASING (Pat Purchase): open Requests for Quotation, click New, choose the vendor,
       //    add the product with quantity 10 and unit price 60.00, save.
-      await purchasePage.goto('/odoo/action-purchase.purchase_rfq');
-      await purchasePage.getByRole('button', { name: 'New' }).click();
+      const purchase = new PurchaseOrderPage(purchasePage);
+      await purchase.gotoRfqList();
+      await purchase.clickNew();
+      await purchase.setVendor(vendorName);
+      await purchase.addProduct(productName, 10, '60.00');
+      await purchase.save();
 
-      await purchasePage.getByRole('combobox', { name: 'Vendor' }).fill(vendorName);
-      await purchasePage.getByRole('option', { name: vendorName }).click();
-
-      await purchasePage.getByRole('button', { name: 'Add a product' }).click();
-      await purchasePage.getByRole('combobox', { name: 'Search a product' }).fill(productName);
-      await purchasePage.getByRole('option', { name: productName }).click();
-      await purchasePage.locator('td[name="product_qty"] input').fill('10');
-      await purchasePage.locator('td[name="price_unit"] input').fill('60.00');
-      await purchasePage.getByRole('button', { name: 'Save manually' }).click();
-
-      await expect(purchasePage.getByRole('row', { name: /^Untaxed Amount:\s*\$ 600\.00/ })).toBeVisible();
-      await expect(purchasePage.getByRole('row', { name: /^Tax 6%:\s*\$ 36\.00/ })).toBeVisible();
-      await expect(purchasePage.getByRole('row', { name: /^Total:\s*\$ 636\.00/ })).toBeVisible();
-      await expect(purchasePage.getByRole('radio', { name: 'RFQ', exact: true })).toBeChecked();
+      await expect(purchase.totalsRow(/^Untaxed Amount:\s*\$ 600\.00/)).toBeVisible();
+      await expect(purchase.totalsRow(/^Tax 6%:\s*\$ 36\.00/)).toBeVisible();
+      await expect(purchase.totalsRow(/^Total:\s*\$ 636\.00/)).toBeVisible();
+      await expect(purchase.statusStep('RFQ')).toBeChecked();
 
       // Wait until Odoo has finished saving: the record exists in the database.
       await expect
@@ -124,8 +119,8 @@ test.describe('Procure to Pay', () => {
       expect(await api.searchCount('account.move', [['partner_id', '=', vendorId]])).toBe(0);
 
       // 3. PURCHASING (Pat Purchase): click Confirm Order.
-      await purchasePage.getByRole('button', { name: 'Confirm Order' }).click();
-      await expect(purchasePage.getByRole('radio', { name: 'Purchase Order', exact: true })).toBeChecked();
+      await purchase.confirmOrder();
+      await expect(purchase.statusStep('Purchase Order')).toBeChecked();
 
       const [order] = await api.searchRead<{ id: number; name: string; state: string; incoming_picking_count: number }>(
         'purchase.order',
@@ -151,15 +146,14 @@ test.describe('Procure to Pay', () => {
 
       // 4. WAREHOUSE (Wes Warehouse): open Inventory > Operations > Receipts, search the PO reference,
       //    open the receipt, click Validate.
-      await warehousePage.goto('/odoo/action-stock.action_picking_tree_incoming');
-      const pickingSearch = warehousePage.getByRole('searchbox', { name: 'Search...' });
-      await pickingSearch.fill(order.name);
-      await pickingSearch.press('Enter');
-      await warehousePage.getByRole('cell', { name: receipt.name }).click();
-      await expect(warehousePage.getByRole('radio', { name: 'Ready', exact: true })).toBeChecked();
-      await warehousePage.getByRole('button', { name: 'Validate' }).click();
+      const receipts = new PickingPage(warehousePage);
+      await receipts.gotoReceipts();
+      await receipts.search(order.name);
+      await receipts.openListCell(receipt.name);
+      await expect(receipts.statusStep('Ready')).toBeChecked();
+      await receipts.validate();
 
-      await expect(warehousePage.getByRole('radio', { name: 'Done', exact: true })).toBeChecked();
+      await expect(receipts.statusStep('Done')).toBeChecked();
 
       const [doneReceipt] = await api.read<{ state: string }>('stock.picking', [receipt.id], ['state']);
       expect(doneReceipt.state).toBe('done');
@@ -188,19 +182,17 @@ test.describe('Procure to Pay', () => {
       // 5. ACCOUNTING (Ada Accounting): open the purchase order, create the vendor bill from it ("Create Bills"
       //    on the order list; Invoicing rights already include read/write on purchase orders), fill Bill Date
       //    and the vendor reference, then click Confirm.
-      await accountingPage.goto('/odoo/action-purchase.purchase_form_action');
-      const orderSearch = accountingPage.getByRole('searchbox', { name: 'Search...' });
-      await orderSearch.fill(order.name);
-      await orderSearch.press('Enter');
-      await accountingPage.getByRole('row', { name: new RegExp(order.name) }).getByRole('checkbox').check();
-      await accountingPage.getByRole('button', { name: 'Create Bills' }).click();
+      const orders = new PurchaseOrderPage(accountingPage);
+      await orders.gotoPurchaseOrders();
+      await orders.search(order.name);
+      await orders.createBillsFor(order.name);
 
-      await expect(accountingPage.getByRole('radio', { name: 'Draft', exact: true })).toBeChecked();
-      await accountingPage.getByRole('textbox', { name: 'Bill Reference' }).fill(vendorRef);
-      await accountingPage.locator('div[name="invoice_date"] input').fill(todayForOdoo());
+      const billPage = new InvoicePage(accountingPage);
+      await expect(billPage.statusStep('Draft')).toBeChecked();
+      await billPage.fillBillDetails(vendorRef, todayForOdoo());
 
-      await accountingPage.getByRole('button', { name: 'Confirm', exact: true }).click();
-      await expect(accountingPage.getByRole('radio', { name: 'Posted', exact: true })).toBeChecked();
+      await billPage.confirm();
+      await expect(billPage.statusStep('Posted')).toBeChecked();
 
       const [bill] = await api.searchRead<{
         id: number;
@@ -243,14 +235,13 @@ test.describe('Procure to Pay', () => {
       expect(billedOrder.invoice_ids).toEqual([bill.id]);
 
       // 6. ACCOUNTING (Ada Accounting): click Pay; journal Bank, Manual Payment, amount 636.00; Create Payment.
-      await accountingPage.getByRole('button', { name: 'Pay', exact: true }).click();
-      const paymentDialog = accountingPage.getByRole('dialog');
-      await expect(paymentDialog.getByRole('combobox', { name: 'Journal' })).toHaveValue('Bank');
-      await expect(paymentDialog.getByRole('combobox', { name: 'Payment Method' })).toHaveValue('Manual Payment');
-      await expect(paymentDialog.getByRole('textbox', { name: 'Amount' })).toHaveValue('636.00');
-      await paymentDialog.getByRole('button', { name: 'Create Payment' }).click();
+      const paymentDialog = await billPage.pay();
+      await expect(paymentDialog.journal).toHaveValue('Bank');
+      await expect(paymentDialog.paymentMethod).toHaveValue('Manual Payment');
+      await expect(paymentDialog.amount).toHaveValue('636.00');
+      await paymentDialog.createPayment();
 
-      await expect(accountingPage.locator('.o_widget_web_ribbon').getByText('Paid')).toBeVisible();
+      await expect(billPage.paidRibbon).toBeVisible();
 
       const [paidBill] = await api.read<{ payment_state: string; amount_residual: number }>(
         'account.move',

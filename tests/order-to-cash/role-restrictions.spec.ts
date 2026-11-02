@@ -4,6 +4,7 @@
 import { randomUUID } from 'node:crypto';
 import { OdooRpcError } from '../../src/api';
 import { test, expect } from '../../src/fixtures';
+import { InvoicePage, OdooPage, PickingPage } from '../../src/pages';
 
 test.describe('Order to Cash', () => {
   test('O2C-N2 Sales user cannot post invoices or move stock (role separation)', async ({ api, apiAs, salesPage }) => {
@@ -86,23 +87,25 @@ test.describe('Order to Cash', () => {
     expect(picking.state).toBe('assigned');
 
     // 2. SALES (Sam Sales): Home Menu shows Sales, not Inventory or Purchase.
-    await salesPage.goto('/odoo');
-    await salesPage.getByTitle('Home Menu').click();
-    await expect(salesPage.getByRole('menuitem', { name: 'Sales', exact: true })).toBeVisible();
-    await expect(salesPage.getByRole('menuitem', { name: 'Inventory', exact: true })).toHaveCount(0);
-    await expect(salesPage.getByRole('menuitem', { name: 'Purchase', exact: true })).toHaveCount(0);
-    await expect(salesPage.getByRole('menuitem', { name: 'Invoicing', exact: true })).toHaveCount(0);
-    await salesPage.keyboard.press('Escape');
+    const home = new OdooPage(salesPage);
+    await home.openHomeMenuFromStart();
+    await expect(home.homeMenuItem('Sales')).toBeVisible();
+    await expect(home.homeMenuItem('Inventory')).toHaveCount(0);
+    await expect(home.homeMenuItem('Purchase')).toHaveCount(0);
+    await expect(home.homeMenuItem('Invoicing')).toHaveCount(0);
+    await home.closeHomeMenu();
 
     // Direct navigation to the draft invoice: access error dialog, or no Confirm button.
-    await salesPage.goto(`/odoo/action-account.action_move_out_invoice_type/${invoice.id}`);
-    await expect(salesPage.getByRole('dialog').or(salesPage.locator('.o_form_view, .o_action_manager')).first()).toBeVisible();
-    await expect(salesPage.getByRole('button', { name: 'Confirm', exact: true })).toHaveCount(0);
+    const invoicePage = new InvoicePage(salesPage);
+    await invoicePage.gotoCustomerInvoice(invoice.id);
+    await expect(invoicePage.dialogOrForm).toBeVisible();
+    await expect(invoicePage.button('Confirm', { exact: true })).toHaveCount(0);
 
     // Direct navigation to the delivery: access error dialog, or no Validate button.
-    await salesPage.goto(`/odoo/action-stock.action_picking_tree_all/${picking.id}`);
-    await expect(salesPage.getByRole('dialog').or(salesPage.locator('.o_form_view, .o_action_manager')).first()).toBeVisible();
-    await expect(salesPage.getByRole('button', { name: 'Validate', exact: true })).toHaveCount(0);
+    const pickingPage = new PickingPage(salesPage);
+    await pickingPage.gotoTransfer(picking.id);
+    await expect(pickingPage.dialogOrForm).toBeVisible();
+    await expect(pickingPage.button('Validate', { exact: true })).toHaveCount(0);
 
     // API as the sales user: posting raises an AccessError. (Validating a delivery is in its own test below.)
     const salesApi = await apiAs('sales');

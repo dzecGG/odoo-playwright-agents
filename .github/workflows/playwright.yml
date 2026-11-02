@@ -1,0 +1,112 @@
+name: Playwright
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *' # nightly, 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: playwright-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Same names as .env.example. .env is never committed, so CI sets them here.
+  ODOO_URL: http://localhost:8069
+  ODOO_MASTER_PASSWORD: admin
+  ODOO_DB: playwright
+  ODOO_ADMIN_LOGIN: admin
+  ODOO_ADMIN_PASSWORD: admin
+  ODOO_COUNTRY: US
+  ODOO_LANG: en_US
+  ODOO_USER_PASSWORD: Playwright-1234
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx tsc --noEmit
+
+      - run: npx playwright install --with-deps chromium
+
+      # A brand-new Odoo: fresh containers and volumes, no database yet.
+      - name: Start Odoo
+        run: docker compose -f docker/compose.yml up -d --wait --wait-timeout 300
+
+      - name: Run the suite on a brand-new Odoo
+        run: npx playwright test
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/run-1
+
+      # Same Odoo, now already set up: the suite must pass again.
+      - name: Run the suite again on the Odoo it has already set up
+        run: npx playwright test
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/run-2
+
+      - name: Odoo logs
+        if: ${{ failure() }}
+        run: docker compose -f docker/compose.yml logs --no-color --tail 500 odoo
+
+      - name: Stop Odoo
+        if: ${{ always() }}
+        run: docker compose -f docker/compose.yml down -v
+
+      - name: Build the report site
+        if: ${{ !cancelled() }}
+        run: |
+          cat > playwright-report/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Odoo Playwright reports</title>
+          <h1>Odoo Playwright reports</h1>
+          <ul>
+            <li><a href="run-1/index.html">Run 1: brand-new Odoo</a></li>
+            <li><a href="run-2/index.html">Run 2: Odoo already set up</a></li>
+          </ul>
+          HTML
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - uses: actions/upload-pages-artifact@v5
+        if: ${{ !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        with:
+          path: playwright-report/
+
+  # Pages can only be published from one branch, so only main publishes
+  # (pushes to main and the nightly run). Needs Settings > Pages > Source: GitHub Actions.
+  publish-report:
+    needs: test
+    if: ${{ !cancelled() && needs.test.result != 'skipped' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

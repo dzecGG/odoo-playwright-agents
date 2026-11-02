@@ -4,6 +4,7 @@
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '../../src/fixtures';
 import type { OdooClient } from '../../src/api';
+import { InvoicePage, PickingPage, SaleOrderPage } from '../../src/pages';
 
 type MoveLine = { account_id: [number, string]; debit: number; credit: number };
 
@@ -92,22 +93,16 @@ test.describe('Order to Cash', () => {
     expect(await api.searchCount('account.payment', [['partner_id', '=', customerId]])).toBe(0);
 
     // 2. SALES (Sam Sales): create the quotation with 10 units at 100.00 and save.
-    await salesPage.goto('/odoo/action-sale.action_quotations_with_onboarding/new');
-    const customerField = salesPage.getByRole('combobox', { name: 'Customer' });
-    await customerField.fill(customerName);
-    await salesPage.getByRole('option', { name: customerName }).first().click();
+    const sales = new SaleOrderPage(salesPage);
+    await sales.gotoNewQuotation();
+    await sales.setCustomer(customerName);
+    await sales.addProduct(productName, 10, '100.00');
+    await sales.save();
 
-    await salesPage.getByRole('button', { name: 'Add a product' }).click();
-    await salesPage.getByRole('combobox', { name: 'Search a product' }).fill(productName);
-    await salesPage.getByRole('option', { name: productName }).first().click();
-    await salesPage.locator('td[name="product_uom_qty"] input').first().fill('10');
-    await salesPage.locator('td[name="price_unit"] input').first().fill('100.00');
-    await salesPage.getByRole('button', { name: 'Save manually' }).click();
-
-    await expect(salesPage.getByRole('row', { name: /^Untaxed Amount:/ })).toContainText('$ 1,000.00');
-    await expect(salesPage.getByRole('row', { name: /^Tax 6%:/ })).toContainText('$ 60.00');
-    await expect(salesPage.getByRole('row', { name: /^Total:/ })).toContainText('$ 1,060.00');
-    await expect(salesPage.getByRole('radio', { name: 'Quotation', exact: true })).toBeChecked();
+    await expect(sales.totalsRow(/^Untaxed Amount:/)).toContainText('$ 1,000.00');
+    await expect(sales.totalsRow(/^Tax 6%:/)).toContainText('$ 60.00');
+    await expect(sales.totalsRow(/^Total:/)).toContainText('$ 1,060.00');
+    await expect(sales.statusStep('Quotation')).toBeChecked();
 
     // Wait until Odoo has finished saving: the record exists in the database.
     await expect.poll(() => api.searchCount('sale.order', [['partner_id', '=', customerId]])).toBe(1);
@@ -120,9 +115,9 @@ test.describe('Order to Cash', () => {
     expect(await api.searchCount('account.move', [['partner_id', '=', customerId]])).toBe(0);
 
     // 3. SALES (Sam Sales): click Confirm.
-    await salesPage.getByRole('button', { name: 'Confirm', exact: true }).click();
+    await sales.confirm();
 
-    await expect(salesPage.getByRole('radio', { name: 'Sales Order', exact: true })).toBeChecked();
+    await expect(sales.statusStep('Sales Order')).toBeChecked();
     // Sam (Sales: User) has no Inventory rights, so Odoo hides the Delivery button from him; the delivery is checked through the API below.
 
     const [order] = await api.searchRead<{ id: number; name: string; state: string }>(
@@ -147,16 +142,15 @@ test.describe('Order to Cash', () => {
     expect(await api.searchCount('account.move', [['partner_id', '=', customerId]])).toBe(0);
 
     // 4. WAREHOUSE (Wes Warehouse): open the delivery from Inventory > Deliveries and click Validate.
-    await warehousePage.goto('/odoo/action-stock.action_picking_tree_outgoing');
-    const pickingSearch = warehousePage.getByRole('searchbox');
-    await pickingSearch.fill(order.name);
-    await pickingSearch.press('Enter');
-    await warehousePage.getByRole('row', { name: new RegExp(delivery.name) }).first().click();
-    await expect(warehousePage.getByRole('radio', { name: 'Ready', exact: true })).toBeChecked();
+    const pickings = new PickingPage(warehousePage);
+    await pickings.gotoDeliveries();
+    await pickings.search(order.name);
+    await pickings.openListRow(new RegExp(delivery.name));
+    await expect(pickings.statusStep('Ready')).toBeChecked();
     await expect(warehousePage.getByText(delivery.name).first()).toBeVisible();
-    await warehousePage.getByRole('button', { name: 'Validate' }).click();
+    await pickings.validate();
 
-    await expect(warehousePage.getByRole('radio', { name: 'Done', exact: true })).toBeChecked();
+    await expect(pickings.statusStep('Done')).toBeChecked();
 
     const [doneDelivery] = await api.read<{ state: string }>('stock.picking', [delivery.id], ['state']);
     expect(doneDelivery.state).toBe('done');
@@ -183,22 +177,20 @@ test.describe('Order to Cash', () => {
 
     // 5. SALES creates the draft invoice; ACCOUNTING (Ada Accounting) confirms it.
     await salesPage.reload();
-    await salesPage.getByRole('button', { name: 'Create Invoice' }).click();
-    await salesPage.getByRole('button', { name: 'Create Draft', exact: true }).click();
+    await sales.createDraftInvoice();
     // Odoo opens the new draft invoice after "Create Draft".
-    await expect(salesPage.getByRole('radio', { name: 'Draft', exact: true })).toBeChecked();
+    await expect(sales.statusStep('Draft')).toBeChecked();
     await expect
       .poll(() => api.searchCount('account.move', [['partner_id', '=', customerId], ['move_type', '=', 'out_invoice'], ['state', '=', 'draft']]))
       .toBe(1);
 
-    await accountingPage.goto('/odoo/action-account.action_move_out_invoice_type');
-    const invoiceSearch = accountingPage.getByRole('searchbox');
-    await invoiceSearch.fill(customerName);
-    await invoiceSearch.press('Enter');
-    await accountingPage.getByRole('row', { name: new RegExp(customerName) }).first().click();
-    await accountingPage.getByRole('button', { name: 'Confirm', exact: true }).click();
+    const invoicePage = new InvoicePage(accountingPage);
+    await invoicePage.gotoCustomerInvoices();
+    await invoicePage.search(customerName);
+    await invoicePage.openListRow(new RegExp(customerName));
+    await invoicePage.confirm();
 
-    await expect(accountingPage.getByRole('radio', { name: 'Posted', exact: true })).toBeChecked();
+    await expect(invoicePage.statusStep('Posted')).toBeChecked();
 
     const [invoice] = await api.searchRead<{
       id: number;
@@ -231,12 +223,11 @@ test.describe('Order to Cash', () => {
     expect((await onHand(api, productId, stockLocationId)).quantity).toBe(10);
 
     // 6. ACCOUNTING (Ada Accounting): register the payment of 1,060.00.
-    await accountingPage.getByRole('button', { name: 'Pay', exact: true }).click();
-    const paymentDialog = accountingPage.getByRole('dialog');
-    await expect(paymentDialog.getByRole('combobox', { name: 'Journal' })).toHaveValue(/Bank/);
-    await paymentDialog.getByRole('button', { name: 'Create Payment' }).click();
+    const paymentDialog = await invoicePage.pay();
+    await expect(paymentDialog.journal).toHaveValue(/Bank/);
+    await paymentDialog.createPayment();
 
-    await expect(accountingPage.locator('span.text-bg-success').getByText('Paid', { exact: true })).toBeVisible();
+    await expect(invoicePage.paidBadge).toBeVisible();
 
     const [paidInvoice] = await api.read<{ payment_state: string; amount_residual: number }>(
       'account.move',
@@ -276,8 +267,8 @@ test.describe('Order to Cash', () => {
     expect((await onHand(api, productId, stockLocationId)).quantity).toBe(10);
 
     // 7. SALES (Sam Sales): reopen the sales order.
-    await salesPage.goto(`/odoo/action-sale.action_quotations_with_onboarding/${order.id}`);
-    await expect(salesPage.getByRole('button', { name: /Invoice/ }).filter({ hasText: '1' })).toBeVisible();
+    await sales.gotoOrder(order.id);
+    await expect(sales.invoiceSmartButton).toBeVisible();
 
     const [finalOrder] = await api.read<{ invoice_status: string; delivery_status: string }>(
       'sale.order',

@@ -3,6 +3,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '../../src/fixtures';
+import { SaleOrderPage } from '../../src/pages';
 
 test.describe('Order to Cash', () => {
   test('O2C-N1 Quotation cannot be saved or confirmed without a customer', async ({ api, salesPage }) => {
@@ -58,27 +59,24 @@ test.describe('Order to Cash', () => {
     expect(await onHand()).toBe(20);
 
     // SALES (Sam Sales): new quotation, no customer, product with quantity 5, save.
-    await salesPage.goto('/odoo/action-sale.action_quotations_with_onboarding/new');
-    await salesPage.getByRole('button', { name: 'Add a product' }).click();
-    await salesPage.getByRole('combobox', { name: 'Search a product' }).fill(productName);
-    await salesPage.getByRole('option', { name: productName }).first().click();
-    await salesPage.locator('td[name="product_uom_qty"] input').first().fill('5');
-    await salesPage.getByRole('button', { name: 'Save manually' }).click();
+    const sales = new SaleOrderPage(salesPage);
+    await sales.gotoNewQuotation();
+    await sales.addProduct(productName, 5);
+    await sales.save();
 
     // expect: the Customer field is flagged invalid and nothing is saved.
-    await expect(salesPage.locator('div[name="partner_id"].o_field_invalid')).toBeVisible();
+    await expect(sales.invalidField('partner_id')).toBeVisible();
     await expect(salesPage).toHaveURL(/\/new$/);
     expect(await api.searchCount('sale.order.line', [['product_id', '=', productId]])).toBe(0);
 
     // 2. Fill the customer and save, then click Confirm.
-    await salesPage.getByRole('combobox', { name: 'Customer' }).fill(customerName);
-    await salesPage.getByRole('option', { name: customerName }).first().click();
-    await salesPage.getByRole('button', { name: 'Save manually' }).click();
-    await expect(salesPage.getByRole('radio', { name: 'Quotation', exact: true })).toBeChecked();
-    await expect(salesPage.locator('div[name="partner_id"].o_field_invalid')).toHaveCount(0);
+    await sales.setCustomer(customerName);
+    await sales.save();
+    await expect(sales.statusStep('Quotation')).toBeChecked();
+    await expect(sales.invalidField('partner_id')).toHaveCount(0);
 
-    await salesPage.getByRole('button', { name: 'Confirm', exact: true }).click();
-    await expect(salesPage.getByRole('radio', { name: 'Sales Order', exact: true })).toBeChecked();
+    await sales.confirm();
+    await expect(sales.statusStep('Sales Order')).toBeChecked();
     // Sam (Sales: User) has no Inventory rights, so Odoo hides the Delivery button from him; the delivery is checked through the API below.
 
     const [order] = await api.searchRead<{ name: string; state: string }>(

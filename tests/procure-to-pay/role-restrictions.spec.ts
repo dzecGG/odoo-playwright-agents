@@ -4,6 +4,7 @@
 import { randomUUID } from 'node:crypto';
 import { OdooRpcError } from '../../src/api';
 import { test, expect } from '../../src/fixtures';
+import { InvoicePage, OdooPage, PurchaseOrderPage } from '../../src/pages';
 
 test.describe('Procure to Pay', () => {
   test('P2P-N2 Warehouse user cannot confirm purchase orders or post vendor bills (role separation)', async ({ api, apiAs, warehousePage }) => {
@@ -68,22 +69,24 @@ test.describe('Procure to Pay', () => {
     expect(billBefore.state).toBe('draft');
 
     // 2. WAREHOUSE (Wes Warehouse, warehousePage): open the Home Menu, then navigate directly to the RFQ and the bill by URL.
-    await warehousePage.goto('/odoo');
-    await warehousePage.getByTitle('Home Menu').click();
-    await expect(warehousePage.getByRole('menuitem', { name: 'Inventory', exact: true })).toBeVisible();
-    await expect(warehousePage.getByRole('menuitem', { name: 'Purchase', exact: true })).toHaveCount(0);
-    await expect(warehousePage.getByRole('menuitem', { name: 'Invoicing', exact: true })).toHaveCount(0);
-    await warehousePage.keyboard.press('Escape');
+    const home = new OdooPage(warehousePage);
+    await home.openHomeMenuFromStart();
+    await expect(home.homeMenuItem('Inventory')).toBeVisible();
+    await expect(home.homeMenuItem('Purchase')).toHaveCount(0);
+    await expect(home.homeMenuItem('Invoicing')).toHaveCount(0);
+    await home.closeHomeMenu();
 
     // Direct navigation to the RFQ: access error dialog, or no Confirm Order button.
-    await warehousePage.goto(`/odoo/action-purchase.purchase_rfq/${orderId}`);
-    await expect(warehousePage.getByRole('dialog').or(warehousePage.locator('.o_form_view, .o_action_manager')).first()).toBeVisible();
-    await expect(warehousePage.getByRole('button', { name: 'Confirm Order' })).toHaveCount(0);
+    const purchase = new PurchaseOrderPage(warehousePage);
+    await purchase.gotoRfq(orderId);
+    await expect(purchase.dialogOrForm).toBeVisible();
+    await expect(purchase.button('Confirm Order')).toHaveCount(0);
 
     // Direct navigation to the vendor bill: access error dialog, or no Confirm button.
-    await warehousePage.goto(`/odoo/action-account.action_move_in_invoice_type/${billId}`);
-    await expect(warehousePage.getByRole('dialog').or(warehousePage.locator('.o_form_view, .o_action_manager')).first()).toBeVisible();
-    await expect(warehousePage.getByRole('button', { name: 'Confirm', exact: true })).toHaveCount(0);
+    const invoicePage = new InvoicePage(warehousePage);
+    await invoicePage.gotoVendorBill(billId);
+    await expect(invoicePage.dialogOrForm).toBeVisible();
+    await expect(invoicePage.button('Confirm', { exact: true })).toHaveCount(0);
 
     // API as the warehouse user: confirming and posting raise an AccessError.
     const warehouseApi = await apiAs('warehouse');

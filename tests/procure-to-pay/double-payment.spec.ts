@@ -3,6 +3,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { test, expect } from '../../src/fixtures';
+import { InvoicePage, PickingPage } from '../../src/pages';
 
 test.describe('Procure to Pay', () => {
   test('P2P-N3 Paid vendor bill cannot be paid twice and the receipt cannot be validated twice', async ({
@@ -81,14 +82,14 @@ test.describe('Procure to Pay', () => {
     expect(bill.amount_residual).toBe(636);
 
     // 2. ACCOUNTING (Ada Accounting): open the bill, click Pay, accept 636.00, Create Payment.
-    await accountingPage.goto(`/odoo/action-account.action_move_in_invoice_type/${billId}`);
-    await expect(accountingPage.getByRole('radio', { name: 'Posted', exact: true })).toBeChecked();
-    await accountingPage.getByRole('button', { name: 'Pay', exact: true }).click();
-    const paymentDialog = accountingPage.getByRole('dialog');
-    await expect(paymentDialog.getByRole('textbox', { name: 'Amount' })).toHaveValue('636.00');
-    await paymentDialog.getByRole('button', { name: 'Create Payment' }).click();
+    const billPage = new InvoicePage(accountingPage);
+    await billPage.gotoVendorBill(billId);
+    await expect(billPage.statusStep('Posted')).toBeChecked();
+    const paymentDialog = await billPage.pay();
+    await expect(paymentDialog.amount).toHaveValue('636.00');
+    await paymentDialog.createPayment();
 
-    await expect(accountingPage.locator('span.text-bg-success').getByText('Paid', { exact: true })).toBeVisible();
+    await expect(billPage.paidBadge).toBeVisible();
 
     const [paidBill] = await api.read<{ payment_state: string; amount_residual: number }>(
       'account.move',
@@ -99,8 +100,8 @@ test.describe('Procure to Pay', () => {
     expect(paidBill.amount_residual).toBe(0);
 
     // 3. ACCOUNTING (Ada): inspect the paid bill buttons. WAREHOUSE (Wes): open the Done receipt and check for a Validate button.
-    await expect(accountingPage.getByRole('button', { name: 'Pay', exact: true })).toHaveCount(0);
-    await expect(accountingPage.getByRole('button', { name: 'Register Payment' })).toHaveCount(0);
+    await expect(billPage.payButton).toHaveCount(0);
+    await expect(billPage.registerPaymentButton).toHaveCount(0);
 
     const payments = await api.searchRead<{ payment_type: string }>(
       'account.payment',
@@ -117,9 +118,10 @@ test.describe('Procure to Pay', () => {
     );
     expect(Math.round(payable.reduce((sum, l) => sum + l.balance, 0) * 100) / 100).toBe(0);
 
-    await warehousePage.goto(`/odoo/action-stock.action_picking_tree_incoming/${receipt.id}`);
-    await expect(warehousePage.getByRole('radio', { name: 'Done', exact: true })).toBeChecked();
-    await expect(warehousePage.getByRole('button', { name: 'Validate' })).toHaveCount(0);
+    const receiptPage = new PickingPage(warehousePage);
+    await receiptPage.gotoReceipt(receipt.id);
+    await expect(receiptPage.statusStep('Done')).toBeChecked();
+    await expect(receiptPage.button('Validate')).toHaveCount(0);
 
     const [doneReceipt] = await api.read<{ state: string }>('stock.picking', [receipt.id], ['state']);
     expect(doneReceipt.state).toBe('done');

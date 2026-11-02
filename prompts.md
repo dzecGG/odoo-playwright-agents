@@ -112,3 +112,32 @@ Every prompt given to an agent while building this suite, in order.
   > Then run npx tsc --noEmit and the test twice in a row, and show me the results.
 - What happened: Claude Code did this work itself, because the healer had no shell. Ada needed no extra group: Invoicing (account.group_account_invoice) already reads and edits purchase orders and their lines, but can't create or delete them. Her earlier "No records" came from the bill form's Auto-Complete field, which needs Purchase: User. Odoo 19 has no Create Bill button on the order form; the route is the Purchase Orders list, select the order, then Create Bills. A live check as Ada made a draft bill for 636.00 linked to the order, and the order became "invoiced". She stays a non-administrator, which the setup checks. Pat: Odoo's code confirms the Receipt and Receive buttons need Inventory rights (stock.group_stock_user), so Pat's step now checks only that the order is confirmed, the API checks the receipt exists and is Ready, and Wes checks the receipt in the UI before validating it. Steps 3 to 5 of P2P-01 in specs/odoo-cycles.plan.md were updated to match. npx tsc --noEmit passes, and procure-to-pay.spec.ts passed twice in a row (9.6 s and 9.5 s) with no test.fail(), soft assertions or bug annotations. The other three Procure to Pay specs weren't run.
 - What I corrected, and why: None. Accepted not adding Purchase: User for Ada, because it would also let her create, confirm and cancel purchase orders, which breaks segregation of duties.
+
+## 9. Heal the remaining tests
+
+- Milestone: 7
+- Agent: Claude Code (main session)
+- Prompt:
+  > P2P-01 is done. Now run every test in tests/ once and heal the failing ones, one at a time, with the same rules as for P2P-01: no test.fail() unless I've reproduced an Odoo bug; never weaken an assertion; each step uses the role the plan names; the accounting user does the billing; if a step fails because of access rights, stop and show me the exact error; at most 3 attempts per test. Keep role-restrictions specs consistent with what we found about Pat and Ada. When done, run npx tsc --noEmit and show me which tests pass and which fail.
+- What happened: 6 of 9 tests pass (P2P-01, P2P-N1, P2P-N2, P2P-N3, O2C-N3 and the seed); O2C-01, O2C-N1 and O2C-N2 stopped on access-rights questions. npx tsc --noEmit is clean. The full run dropped from 16.8 minutes to 36 seconds. No test.fail(), bug annotations or weakened assertions were added; the only check removed was Pat's Receipt button, as decided in entry 8. Most fixes were wrong guesses by the generator: the product field is a "Search a product" combobox, the tax row is "Tax 6%:", the invoice button is "Create Draft", the fields are account_move_id and tax_ids, and the "Paid" locator also matched the chatter. The customer payment debits 101403 Outstanding Receipts. Open questions: Sam (Sales: User) can't see the Delivery button, which needs Inventory rights; and Sam can validate a delivery through the external API, because Sales: User has write access to deliveries, although the UI hides it.
+- What I corrected, and why: None in this round. Decisions in entry 10.
+
+## 10. Sam's Delivery button, and the delivery validation finding
+
+- Milestone: 7
+- Agent: Claude Code (main session)
+- Prompt:
+  > 1. Sam and the Delivery button: same decision as Pat. Drop the button check for Sam, keep the API check that the delivery exists and is Ready, and have Wes check the delivery in the UI before validating it.
+  > 2. Sam validating a delivery over the API: keep the assertion. The business rule is that only the warehouse ships goods. Move this one check into its own test so test.fail() covers nothing else, and mark it test.fail() with the annotation { type: 'bug', description: 'Segregation of duties: a Sales: User can validate a delivery through the external API (stock.picking.button_validate), although the UI hides it' }. Then show me the error that test gives with test.fail() removed, so I can confirm it fails for this reason only.
+  > Then run npx tsc --noEmit and the full suite twice in a row. Don't commit; I'll review the diff and commit.
+- What happened: O2C-01 and O2C-N1 no longer check Sam's Delivery button; the API checks the delivery exists and is Ready, and in O2C-01 Wes checks it in the UI before validating it. O2C-N2 still checks that Sam can't post an invoice and has no Inventory app. The delivery-validation check moved to a new test, O2C-N2b in role-restrictions.spec.ts, the only test with test.fail(), using the annotation exactly as given. With test.fail() removed, it fails at line 173, expect(validateError).toBeInstanceOf(OdooRpcError): Sam's button_validate returned true instead of raising an error, and nothing failed before it. All tests pass twice in a row (13 passed: 3 setup steps and 10 tests, with O2C-N2b as an expected failure), and npx tsc --noEmit is clean.
+- What I corrected, and why: Kept the delivery assertion instead of changing it to match Odoo: the requirement says only the warehouse ships goods, and Odoo enforces that only in the interface. Isolated the check in its own test so test.fail() can't hide anything else. Confirmed the failure reason from the error before accepting it.
+
+## 11. Update the plan to match the healed tests
+
+- Milestone: 7
+- Agent: Claude Code (main session)
+- Prompt:
+  > Yes, update specs/odoo-cycles.plan.md so O2C-01, O2C-N2 and the new O2C-N2b match the tests: Sam's steps without the Delivery button, Wes checking the delivery in the UI before validating it, and the delivery-validation check as its own scenario with the finding. Change nothing else.
+- What happened: Pending
+- What I corrected, and why: Pending
