@@ -1,0 +1,62 @@
+# Odoo Community 19.0 + PostgreSQL for the Playwright suite.
+#
+#   docker compose -f docker/compose.yml up -d --wait
+#
+# The project name keeps these containers, volumes and networks apart from
+# any other Docker project on this computer.
+name: odoo-playwright
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  odoo:
+    image: odoo:19.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+    # ODOO_MASTER_PASSWORD (the database manager password) comes from the
+    # repository's .env when it exists; otherwise it falls back to "admin".
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    # Copy the image's config, add the master password, then start Odoo with
+    # the image's own entrypoint.
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+        cp /etc/odoo/odoo.conf /tmp/odoo.conf
+        printf '\nadmin_passwd = %s\n' "$${ODOO_MASTER_PASSWORD:-admin}" >> /tmp/odoo.conf
+        export ODOO_RC=/tmp/odoo.conf
+        exec /entrypoint.sh odoo
+    volumes:
+      - odoo-data:/var/lib/odoo
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8069/web/health', timeout=5)"]
+      interval: 5s
+      timeout: 10s
+      retries: 60
+      start_period: 10s
+
+volumes:
+  db-data:
+  odoo-data:
