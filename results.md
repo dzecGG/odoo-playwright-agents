@@ -37,7 +37,7 @@ Model: the Playwright agents run on Sonnet (set by init-agents). Main session: n
 | Lines of TypeScript | Not measured yet | Not measured yet |
 | Time to run the suite | Not measured yet | 36 seconds |
 
-## Notes for "What I learned" (draft)
+## Notes for "What I learned"
 
 - The generator agents wrote tests without running them, and guessed locators. Generated tests need checking even when the agent sounds confident.
 - An agent told never to weaken an assertion still made a failing test green with a blanket test.fail(). The rule alone didn't stop it; reviewing the diff did.
